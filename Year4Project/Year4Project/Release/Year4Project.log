@@ -1,0 +1,15 @@
+﻿  Game.cpp
+  LoadMap.cpp
+  main.cpp
+  Map.cpp
+C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(41,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(43,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(60,20): warning C4018:  '<': signed/unsigned mismatch
+  Road.cpp
+  Town.cpp
+C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(65,20): warning C4018:  '<': signed/unsigned mismatch
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 214 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Year4Project.vcxproj -> C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Release\Year4Project.exe
