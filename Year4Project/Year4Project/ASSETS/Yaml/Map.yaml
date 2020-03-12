@@ -1,0 +1,34 @@
+Towns:
+  - Name: "Town 1"
+    Position X: 50
+    Position Y: 50
+  - Name: "Town 2"
+    Position X: 200
+    Position Y: 50
+  - Name: "Town 3"
+    Position X: 200
+    Position Y: 200
+  - Name: "Town 4"
+    Position X: 50
+    Position Y: 200
+  - Name: "Town 5"
+    Position X: 400
+    Position Y: 400
+  - Name: "Town 6"
+    Position X: 400
+    Position Y: 50
+Roads:
+  - Id1: 0
+    Id2: 1
+  - Id1: 1
+    Id2: 2
+  - Id1: 2
+    Id2: 3
+  - Id1: 3
+    Id2: 0
+  - Id1: 2
+    Id2: 4
+  - Id1: 1
+    Id2: 3
+  - Id1: 1
+    Id2: 5

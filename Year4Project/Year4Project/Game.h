@@ -26,6 +26,7 @@ private:
 
 	void processEvents();
 	void processKeys(sf::Event t_event);
+	void processLeftMouseKey();
 	void update(sf::Time t_deltaTime);
 	void render();
 	
@@ -39,6 +40,7 @@ private:
 	sf::Sprite m_logoSprite; // sprite used for sfml logo
 	bool m_exitGame; // control exiting game
 	Map* m_map;
+	MapData m_mapData;
 };
 
 #endif // !GAME_HPP

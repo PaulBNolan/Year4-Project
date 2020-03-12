@@ -1,15 +1,14 @@
 ﻿  Game.cpp
-  LoadMap.cpp
-  main.cpp
-  Map.cpp
-C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(41,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(43,21): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(60,20): warning C4018:  '<': signed/unsigned mismatch
-  Road.cpp
-  Town.cpp
-C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(65,20): warning C4018:  '<': signed/unsigned mismatch
-  Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 214 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Finished generating code
-  Year4Project.vcxproj -> C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Release\Year4Project.exe
+LoadMap.obj : error LNK2001: unresolved external symbol "class YAML::Node __cdecl YAML::LoadFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?LoadFile@YAML@@YA?AVNode@1@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: virtual __thiscall YAML::InvalidNode::~InvalidNode(void)" (??1InvalidNode@YAML@@UAE@XZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: virtual __thiscall YAML::Exception::~Exception(void)" (??1Exception@YAML@@UAE@XZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: virtual __thiscall YAML::RepresentationException::~RepresentationException(void)" (??1RepresentationException@YAML@@UAE@XZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: virtual __thiscall YAML::BadConversion::~BadConversion(void)" (??1BadConversion@YAML@@UAE@XZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: virtual __thiscall YAML::BadSubscript::~BadSubscript(void)" (??1BadSubscript@YAML@@UAE@XZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: class YAML::detail::node & __thiscall YAML::detail::memory::create_node(void)" (?create_node@memory@detail@YAML@@QAEAAVnode@23@XZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & __cdecl YAML::detail::node_data::empty_scalar(void)" (?empty_scalar@node_data@detail@YAML@@SAABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: unsigned int __thiscall YAML::detail::node_data::size(void)const " (?size@node_data@detail@YAML@@QBEIXZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: void __thiscall YAML::detail::node_data::set_null(void)" (?set_null@node_data@detail@YAML@@QAEXXZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: void __thiscall YAML::detail::node_data::mark_defined(void)" (?mark_defined@node_data@detail@YAML@@QAEXXZ)
+LoadMap.obj : error LNK2001: unresolved external symbol "public: void __thiscall YAML::detail::memory_holder::merge(class YAML::detail::memory_holder &)" (?merge@memory_holder@detail@YAML@@QAEXAAV123@@Z)
+C:\Users\halo2\Desktop\Year4-Project\Year4Project\Release\Year4Project.exe : fatal error LNK1120: 12 unresolved externals

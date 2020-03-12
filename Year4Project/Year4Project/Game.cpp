@@ -17,12 +17,14 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 800U, 600U, 32U }, "SFML Game" },
+	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "SFML Game" },
 	m_exitGame{false} //when true game will exit
 {
+	LoadMap::load(m_mapData);
+
 	setupFontAndText(); // load font 
 	setupSprite(); // load texture
-	m_map = new Map();
+	m_map = new Map(m_mapData);
 }
 
 /// <summary>
@@ -78,6 +80,10 @@ void Game::processEvents()
 		{
 			processKeys(newEvent);
 		}
+		else if (sf::Event::MouseButtonPressed == newEvent.type)
+		{
+			processLeftMouseKey();
+		}
 	}
 }
 
@@ -92,6 +98,11 @@ void Game::processKeys(sf::Event t_event)
 	{
 		m_exitGame = true;
 	}
+}
+
+void Game::processLeftMouseKey()
+{
+	m_map->processLeftMouseKey(sf::Mouse::getPosition(m_window));
 }
 
 /// <summary>

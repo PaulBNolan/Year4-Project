@@ -1,2 +1,3 @@
 ﻿  Road.cpp
-  Year4Project.vcxproj -> C:\Users\gameuser\Desktop\Year4-Project\Year4Project\Debug\Year4Project.exe
+C:\Users\halo2\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(47,89): warning C4244:  '=': conversion from 'double' to 'float', possible loss of data
+  Year4Project.vcxproj -> C:\Users\halo2\Desktop\Year4-Project\Year4Project\Debug\Year4Project.exe
