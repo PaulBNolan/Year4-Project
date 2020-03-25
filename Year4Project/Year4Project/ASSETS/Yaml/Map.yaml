@@ -17,18 +17,40 @@ Towns:
   - Name: "Town 6"
     Position X: 400
     Position Y: 50
+  - Name: "Town 7"
+    Position X: 550
+    Position Y: 200
+  - Name: "Town 8"
+    Position X: 700
+    Position Y: 50
 Roads:
   - Id1: 0
     Id2: 1
+    Width: 2
   - Id1: 1
     Id2: 2
+    Width: 2
   - Id1: 2
     Id2: 3
+    Width: 2
   - Id1: 3
     Id2: 0
+    Width: 2
   - Id1: 2
     Id2: 4
+    Width: 2
   - Id1: 1
     Id2: 3
+    Width: 2
   - Id1: 1
     Id2: 5
+    Width: 2
+  - Id1: 5
+    Id2: 7
+    Width: 1
+  - Id1: 5
+    Id2: 6
+    Width: 2
+  - Id1: 6
+    Id2: 7
+    Width: 2

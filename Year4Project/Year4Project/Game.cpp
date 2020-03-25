@@ -17,7 +17,7 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "SFML Game" },
+	m_window{ sf::VideoMode{ 800, 800, 32U }, "SFML Game" },
 	m_exitGame{false} //when true game will exit
 {
 	LoadMap::load(m_mapData);
@@ -25,6 +25,7 @@ Game::Game() :
 	setupFontAndText(); // load font 
 	setupSprite(); // load texture
 	m_map = new Map(m_mapData);
+	m_car = new Car(m_map->m_path);
 }
 
 /// <summary>
@@ -82,7 +83,10 @@ void Game::processEvents()
 		}
 		else if (sf::Event::MouseButtonPressed == newEvent.type)
 		{
-			processLeftMouseKey();
+			if (m_map->getPath().size() == 0)
+			{
+				processLeftMouseKey();
+			}
 		}
 	}
 }
@@ -102,7 +106,7 @@ void Game::processKeys(sf::Event t_event)
 
 void Game::processLeftMouseKey()
 {
-	m_map->processLeftMouseKey(sf::Mouse::getPosition(m_window));
+	m_map->processLeftMouseKey(m_car->getPosition(),sf::Mouse::getPosition(m_window));
 }
 
 /// <summary>
@@ -115,6 +119,11 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	else
+	{
+		m_car->update();
+	}
+
 }
 
 /// <summary>
@@ -126,6 +135,7 @@ void Game::render()
 	//m_window.draw(m_welcomeMessage);
 	//m_window.draw(m_logoSprite);
 	m_map->render(m_window);
+	m_car->render(m_window);
 	m_window.display();
 }
 

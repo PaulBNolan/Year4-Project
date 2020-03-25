@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Car.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="LoadMap.cpp" />
     <ClCompile Include="main.cpp" />
@@ -27,6 +28,7 @@
     <ClCompile Include="Town.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Car.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="LoadMap.h" />
     <ClInclude Include="Map.h" />

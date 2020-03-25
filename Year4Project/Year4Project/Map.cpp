@@ -8,7 +8,7 @@ Map::Map(MapData t_map)
 	}
 	for (int i = 0; i < t_map.m_roads.size(); i++)
 	{
-		m_roadList.push_back(new Road(i));
+		m_roadList.push_back(new Road(i,t_map.m_roads[i].m_width));
 
 		m_roadList[i]->setPositions(m_townList[t_map.m_roads[i].m_relatedId1]->getCenter());
 		m_roadList[i]->setPositions(m_townList[t_map.m_roads[i].m_relatedId2]->getCenter());
@@ -36,13 +36,14 @@ Map::Map(MapData t_map)
 	}
 }
 
-void Map::generatePath(int t_startId, int t_endId)
+void Map::generatePath(int t_startId, int t_targetId)
 {
+
 	Town* m_startTown = m_townList[t_startId];
-	Town* m_endTown = m_townList[t_endId];
+	Town* m_endTown = m_townList[t_targetId];
 
 	std::cout << "Start " << t_startId << std::endl;
-	std::cout << "End " << t_endId << std::endl;
+	std::cout << "End " << t_targetId << std::endl;
 
 	for (int i = 0; i < m_townList.size(); i++)
 	{
@@ -55,6 +56,19 @@ void Map::generatePath(int t_startId, int t_endId)
 		}
 		m_townList[i]->setColor(sf::Color::Blue);
 	}
+
+	for (int i = 0; i < m_roadList.size(); i++)
+	{
+		if (m_roadList[i]->getWidth() > 1)
+		{
+			m_roadList[i]->setActive(true);
+		}
+		else
+		{
+			m_roadList[i]->setActive(false);
+		}
+	}
+
 
 	std::vector<Town*> m_searchQue;
 
@@ -81,33 +95,36 @@ void Map::generatePath(int t_startId, int t_endId)
 			}
 			std::cout << "Size: " << m_searchQue.front()->getRelatedIds().size() << std::endl;
 			std::cout << m_currentTownId <<" Checking Town: " << m_townIndex << std::endl;
-			int pathCost = m_townList[m_currentTownId]->getAccumaltedCost();
-
-			int m_prevId = m_townList[m_currentTownId]->getPrevId();
-
-			if (m_townIndex != m_prevId)
+			if (m_roadList[m_roadIndex]->getActive())
 			{
-				int dist = m_roadList[m_roadIndex]->getWeight() + pathCost + m_townList[m_townIndex]->getHeuristic();
-				int m_searchedNode = m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic();
-				//std::cout << dist << std::endl;
-				//std::cout << m_searchedNode << std::endl;
-				if (dist < m_searchedNode)
+				int pathCost = m_townList[m_currentTownId]->getAccumaltedCost();
+
+				int m_prevId = m_townList[m_currentTownId]->getPrevId();
+
+				if (m_townIndex != m_prevId)
 				{
-					m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
-					m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(),m_townList[m_currentTownId]->getAccumaltedCost());
-				}
+					int dist = m_roadList[m_roadIndex]->getWeight() + pathCost + m_townList[m_townIndex]->getHeuristic();
+					int m_searchedNode = m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic();
+					//std::cout << dist << std::endl;
+					//std::cout << m_searchedNode << std::endl;
+					if (dist < m_searchedNode)
+					{
+						m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
+						m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_townList[m_currentTownId]->getAccumaltedCost());
+					}
 
 
-				if (m_townList[m_townIndex]->getChecked() == false)
-				{
-					m_townList[m_townIndex]->setChecked(true);
-					m_searchQue.push_back(m_townList[m_townIndex]);
+					if (m_townList[m_townIndex]->getChecked() == false)
+					{
+						m_townList[m_townIndex]->setChecked(true);
+						m_searchQue.push_back(m_townList[m_townIndex]);
+					}
 				}
 			}
 		}
 		m_searchQue.erase(m_searchQue.begin());
 	}
-	int m_currentIndex = t_endId;
+	int m_currentIndex = t_targetId;
 	m_path.clear();
 	std::cout << "Path Start" << std::endl;
 	while (m_currentIndex != -666)
@@ -125,25 +142,28 @@ void Map::generatePath(int t_startId, int t_endId)
 	}
 }
 
-void Map::processLeftMouseKey(sf::Vector2i t_pos)
+void Map::processLeftMouseKey(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 {
-	int dist;
+	float startDist;
+	float currentStartDist = 0;
+	int endDist;
 	for (int i = 0; i < m_townList.size(); i++)
 	{
-		dist = sqrt(pow(m_townList[i]->getCenter().x - t_pos.x,2) + pow(m_townList[i]->getCenter().y - t_pos.y,2));
-		if (dist < 25)
+		startDist = getDistance(m_townList[i]->getCenter(), t_carPos);
+		endDist = getDistance(m_townList[i]->getCenter(),sf::Vector2f(t_mousePos));
+
+		if (startDist < currentStartDist || currentStartDist == 0)
 		{
-			if (m_startEndIds[0] == -10)
-			{
-				m_startEndIds[0] = i;
-			}
-			else if(i != m_startEndIds[0])
-			{
-				m_startEndIds[1] = i;
-				generatePath(m_startEndIds[0], m_startEndIds[1]);
-			}
+			currentStartDist = startDist;
+			m_startEndIds[0] = i;
+		}
+
+		if (endDist < 25)
+		{
+			m_startEndIds[1] = i;
 		}
 	}
+	generatePath(m_startEndIds[0], m_startEndIds[1]);
 }
 
 void Map::render(sf::RenderWindow& t_window)
@@ -157,4 +177,9 @@ void Map::render(sf::RenderWindow& t_window)
 	{
 		m_townList[i]->render(t_window);
 	}
+}
+
+float Map::getDistance(sf::Vector2f t_current, sf::Vector2f t_dest)
+{
+	return  sqrt(pow(t_current.x - t_dest.x, 2) + pow(t_current.y - t_dest.y, 2));
 }

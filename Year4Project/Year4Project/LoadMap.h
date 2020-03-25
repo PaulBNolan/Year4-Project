@@ -16,6 +16,7 @@ struct RoadData
 {
 	int m_relatedId1;
 	int m_relatedId2;
+	int m_width;
 };
 
 struct MapData

@@ -11,6 +11,7 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 #include "Map.h"
+#include "Car.h"
 #include "LoadMap.h"
 class Game
 {
@@ -41,6 +42,7 @@ private:
 	bool m_exitGame; // control exiting game
 	Map* m_map;
 	MapData m_mapData;
+	Car* m_car;
 };
 
 #endif // !GAME_HPP

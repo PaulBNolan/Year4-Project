@@ -6,6 +6,7 @@ void operator >> (const YAML::Node& t_roadNode, RoadData& t_road)
 {
 	t_road.m_relatedId1 = t_roadNode["Id1"].as<int>();
 	t_road.m_relatedId2 = t_roadNode["Id2"].as<int>();
+	t_road.m_width = t_roadNode["Width"].as<int>();
 }
 
 void operator >> (const YAML::Node& t_townNode, TownData& t_town)

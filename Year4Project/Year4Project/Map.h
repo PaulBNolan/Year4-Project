@@ -11,15 +11,22 @@ public:
 	Map(MapData t_map);
 
 	void generatePath(int t_startId, int t_endId);
-	void processLeftMouseKey(sf::Vector2i t_pos);
+	void processLeftMouseKey(sf::Vector2f t_carPos, sf::Vector2i t_pos);
 	void render(sf::RenderWindow& t_window);
+
+	std::vector<Town*> getPath()
+	{
+		return m_path;
+	}
+	std::vector<Town*> m_path;
 private:
 	std::vector<Town*> m_townList;
 	std::vector<Road*> m_roadList;
 
-	std::vector<Town*> m_path;
-
 	int m_startEndIds[2];
+
+	float getDistance(sf::Vector2f t_current, sf::Vector2f t_dest);
+
 };
 
 #endif // !1
