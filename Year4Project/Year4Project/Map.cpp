@@ -110,9 +110,9 @@ void Map::generatePath(int t_startId, int t_targetId)
 
 				int m_prevId = m_townList[m_currentTownId]->getPrevId();
 
-				
+				float m_estimatedFuelCost = m_townList[m_currentTownId]->getCurrentFuel() - m_roadList[m_roadIndex]->getWeight();
 
-				if (m_townIndex != m_prevId && m_townList[m_currentTownId]->getCurrentFuel() - m_roadList[m_roadIndex]->getWeight() >= 0)
+				if (m_townIndex != m_prevId && m_estimatedFuelCost >= 0)
 				{
 					//std::cout << m_townList[m_currentTownId]->getCurrentFuel() << " " << m_roadList[m_roadIndex]->getWeight() << std::endl;
 					//std::cout << m_townList[m_townIndex]->getCurrentFuel() << std::endl;
@@ -120,9 +120,18 @@ void Map::generatePath(int t_startId, int t_targetId)
 					int dist = m_roadList[m_roadIndex]->getWeight() + pathCost + m_townList[m_townIndex]->getHeuristic();
 					int m_searchedNode = m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic();
 
-					if (dist < m_searchedNode)
+					///The first half of the below situation is to check for the shortest path to the destination while the second half is used
+					///when a route encounters a shorter route with the less fuel ie the shorter route will be created first but if it encounters 
+					///a longer route with more fuel the longer route takes priority
+					if (dist < m_searchedNode || (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel() && m_townList[m_townIndex]->getChecked()))
 					{
-						m_townList[m_townIndex]->setCurrentFuel(m_townList[m_currentTownId]->getCurrentFuel() - m_roadList[m_roadIndex]->getWeight() + m_townList[m_townIndex]->getFuelValue());
+
+						if (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel())
+						{
+							m_townList[m_townIndex]->setChecked(false);
+						}
+
+						m_townList[m_townIndex]->setCurrentFuel(m_estimatedFuelCost + m_townList[m_townIndex]->getFuelValue());
 						m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
 						m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_townList[m_currentTownId]->getAccumaltedCost());
 					}
