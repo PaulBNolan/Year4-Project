@@ -1,19 +1,17 @@
-﻿  main.cpp
-  Map.cpp
+﻿  Map.cpp
 C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(5,20): warning C4018: '<': signed/unsigned mismatch
 C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(9,20): warning C4018: '<': signed/unsigned mismatch
 C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(19,20): warning C4018: '<': signed/unsigned mismatch
 C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(21,21): warning C4018: '<': signed/unsigned mismatch
 C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(48,20): warning C4018: '<': signed/unsigned mismatch
 C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(54,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(60,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(84,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(100,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(106,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(107,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(150,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(153,24): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(171,20): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(176,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(61,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(91,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(109,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(120,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(121,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(182,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(185,24): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(207,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(212,20): warning C4018: '<': signed/unsigned mismatch
   Year4Project.vcxproj -> C:\Users\paul\Desktop\Year4-Project\Year4Project\Debug\Year4Project.exe

@@ -17,6 +17,8 @@ public:
 
 	int getWidth();
 
+	float m_maximumFuel;
+
 	float getDistance(sf::Vector2f t_current, sf::Vector2f t_dest);
 private:
 	sf::CircleShape m_body;

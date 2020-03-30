@@ -2,27 +2,43 @@ Towns:
   - Name: "Town 1"
     Position X: 50
     Position Y: 50
+    Value: 0
   - Name: "Town 2"
     Position X: 200
     Position Y: 50
+    Value: 0
   - Name: "Town 3"
     Position X: 200
     Position Y: 200
+    Value: 0
   - Name: "Town 4"
     Position X: 50
     Position Y: 200
+    Value: 0
   - Name: "Town 5"
     Position X: 400
     Position Y: 400
+    Value: 0
   - Name: "Town 6"
     Position X: 400
     Position Y: 50
+    Value: 0
   - Name: "Town 7"
     Position X: 550
     Position Y: 200
+    Value: 0
   - Name: "Town 8"
     Position X: 700
     Position Y: 50
+    Value: 1000
+  - Name: "Town 9"
+    Position X: 700
+    Position Y: 400
+    Value: 0
+  - Name: "Town 10"
+    Position X: 700
+    Position Y: 700
+    Value: 0
 Roads:
   - Id1: 0
     Id2: 1
@@ -53,4 +69,13 @@ Roads:
     Width: 2
   - Id1: 6
     Id2: 7
+    Width: 2
+  - Id1: 4
+    Id2: 9
+    Width: 2
+  - Id1: 7
+    Id2: 8
+    Width: 2
+  - Id1: 8
+    Id2: 9
     Width: 2

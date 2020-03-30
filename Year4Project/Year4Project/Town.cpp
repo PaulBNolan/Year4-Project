@@ -1,6 +1,6 @@
 #include "Town.h"
 
-Town::Town(sf::Vector2f t_position, int t_id)
+Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 {
 	m_position = t_position;
 	m_town.setPosition(m_position);
@@ -20,6 +20,8 @@ Town::Town(sf::Vector2f t_position, int t_id)
 	m_IdText.setFont(m_font);
 
 	m_prevId = -666;
+
+	m_fuelValue = t_value;
 }
 
 void Town::render(sf::RenderWindow& t_window)
@@ -51,6 +53,11 @@ void Town::setPrevId(int t_id)
 void Town::setChecked(bool t_checked)
 {
 	m_checked = t_checked;
+}
+
+void Town::setCurrentFuel(float t_fuel)
+{
+	m_currentFuel = t_fuel;
 }
 
 void Town::setColor(sf::Color t_color)
@@ -96,4 +103,14 @@ bool Town::getChecked()
 std::vector<int> Town::getRelatedIds()
 {
 	return m_connectedRoadIds;
+}
+
+float Town::getCurrentFuel()
+{
+	return m_currentFuel;
+}
+
+float Town::getFuelValue()
+{
+	return m_fuelValue;
 }

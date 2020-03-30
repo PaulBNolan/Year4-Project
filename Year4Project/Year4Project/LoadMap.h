@@ -10,6 +10,7 @@ struct TownData
 {
 	std::string m_name;
 	sf::Vector2f m_position;
+	float m_fuelValue;
 };
 
 struct RoadData

@@ -24,8 +24,8 @@ void Car::update()
 
 		if (getDistance(m_position, m_path.back()->getCenter()) < 10)
 		{
+			//std::cout << "Fuel " << m_path.back()->getCurrentFuel() << std::endl;
 			m_path.pop_back();
-			std::cout << m_path.size() << std::endl;
 			if (m_path.size() > 0)
 			{
 				m_angle = atan2(m_position.y - m_path.back()->getCenter().y, m_position.x - m_path.back()->getCenter().x);

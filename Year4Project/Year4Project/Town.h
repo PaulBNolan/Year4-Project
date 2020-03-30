@@ -6,7 +6,7 @@
 class Town
 {
 public:
-	Town(sf::Vector2f t_position, int t_id);
+	Town(sf::Vector2f t_position, float t_value,int t_id);
 
 	void render(sf::RenderWindow& t_window);
 	void setRelatedIds(int t_id);
@@ -19,6 +19,10 @@ public:
 
 	void setAccumaltedCost(float t_roadWeight, float t_prevWeight);
 	float getAccumaltedCost();
+
+	void setCurrentFuel(float t_fuel);
+	float getCurrentFuel();
+	float getFuelValue();
 
 	void setPrevId(int t_id);
 	int getPrevId();
@@ -36,8 +40,13 @@ private:
 	sf::CircleShape m_town;
 	sf::Vector2f m_position;
 	sf::Vector2f m_center;
+
 	float m_heuristic;
 	float m_accumulatedCost;
+	float m_fuelValue;
+	float m_currentFuel;
+
+
 	int m_prevId;
 	bool m_checked;
 	sf::Text m_IdText;

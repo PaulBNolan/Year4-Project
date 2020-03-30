@@ -14,6 +14,7 @@ void operator >> (const YAML::Node& t_townNode, TownData& t_town)
 	t_town.m_name = t_townNode["Name"].as<std::string>();
 	t_town.m_position.x = t_townNode["Position X"].as<float>();
 	t_town.m_position.y = t_townNode["Position Y"].as<float>();
+	t_town.m_fuelValue = t_townNode["Value"].as<float>();
 }
 
 void operator >> (const YAML::Node& t_mapNode, MapData& t_map)
