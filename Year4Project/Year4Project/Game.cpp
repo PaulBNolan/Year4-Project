@@ -17,7 +17,7 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 800, 800, 32U }, "SFML Game" },
+	m_window{ sf::VideoMode{ 1200, 600}, "SFML Game" },
 	m_exitGame{false} //when true game will exit
 {
 	LoadMap::load(m_mapData);
@@ -131,7 +131,7 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.clear(sf::Color::White);
+	m_window.clear();
 	//m_window.draw(m_welcomeMessage);
 	//m_window.draw(m_logoSprite);
 	m_map->render(m_window);

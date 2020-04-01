@@ -22,6 +22,9 @@ public:
 
 	void setCurrentFuel(float t_fuel);
 	float getCurrentFuel();
+
+	void useFuelValue();
+	void resetFuelValue();
 	float getFuelValue();
 
 	void setPrevId(int t_id);
@@ -43,6 +46,8 @@ private:
 
 	float m_heuristic;
 	float m_accumulatedCost;
+
+	float m_originalFuelValue;
 	float m_fuelValue;
 	float m_currentFuel;
 

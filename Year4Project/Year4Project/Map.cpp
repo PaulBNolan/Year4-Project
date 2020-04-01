@@ -54,7 +54,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 			m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000,0);
 			m_townList[i]->setChecked(false);
 		}
-		m_townList[i]->setColor(sf::Color::Blue);
+		m_townList[i]->setColor(sf::Color::Yellow);
 		m_townList[i]->setCurrentFuel(0);
 	}
 
@@ -75,7 +75,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 
 	m_searchQue.push_back(m_startTown);
 
-	float m_fuel = 950;
+	float m_fuel = 450;
 
 	m_startTown->setChecked(true);
 	m_startTown->setCurrentFuel(m_fuel);
@@ -85,7 +85,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 
 	auto m_checkTimeStart = std::chrono::high_resolution_clock::now();
 
-	while (m_searchQue.size() != 0)
+	while (m_searchQue.size() != 0 && m_searchQue.front()->getID() != t_targetId)
 	{
 		int m_currentTownId = m_searchQue.front()->getID();
 		for (int i = 0; i < m_searchQue.front()->getRelatedIds().size(); i++)
@@ -132,6 +132,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 						}
 
 						m_townList[m_townIndex]->setCurrentFuel(m_estimatedFuelCost + m_townList[m_townIndex]->getFuelValue());
+						m_townList[m_townIndex]->useFuelValue();
 						m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
 						m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_townList[m_currentTownId]->getAccumaltedCost());
 					}
@@ -167,6 +168,18 @@ void Map::generatePath(int t_startId, int t_targetId)
 			m_townList[m_currentIndex]->setColor(sf::Color::Green);
 		}
 			m_currentIndex = m_townList[m_currentIndex]->getPrevId();
+
+			//Temporary fix for a looping bug causing by previous Ids
+			//Considered Permanent solution considered involves
+			//each town being given a vector to store ids of nodes 
+			//that makes up the path. Each node starts off with an empty
+			//list. When a node is checked and added to the path its vector
+			//will be made identical to the previous node with its own id added.
+			//The target node should have the complete list.
+			if (m_currentIndex == t_startId)
+			{
+				break;
+			}
 	}
 	std::cout << "Path End" << std::endl;
 
@@ -208,6 +221,11 @@ void Map::processLeftMouseKey(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 	if (m_startEndIds[1] != -1)
 	{
 		generatePath(m_startEndIds[0], m_startEndIds[1]);
+	}
+
+	for (int i = 0; i < m_townList.size(); i++)
+	{
+		m_townList[i]->resetFuelValue();
 	}
 }
 

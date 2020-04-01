@@ -2,17 +2,26 @@
 
 Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 {
+	float radius = 12.5;
+
 	m_position = t_position;
 	m_town.setPosition(m_position);
-	m_town.setRadius(25);
-	m_town.setFillColor(sf::Color::Blue);
+	m_town.setRadius(radius);
+	if (t_value == 0)
+	{
+		m_town.setFillColor(sf::Color::Yellow);
+	}
+	else
+	{
+		m_town.setFillColor(sf::Color::Magenta);
+	}
 
-	m_center = sf::Vector2f(t_position.x + 25, t_position.y + 25);
+	m_center = sf::Vector2f(t_position.x + radius, t_position.y + radius);
 	m_townId = t_id;
 	m_accumulatedCost = 0;
 	m_IdText.setString(std::to_string(m_townId));
 	m_IdText.setPosition(m_position);
-	m_IdText.setCharacterSize(50);
+	m_IdText.setCharacterSize(radius * 2);
 	m_IdText.setFillColor(sf::Color::Red);
 
 	m_font.loadFromFile("ASSETS/FONTS/arial.ttf");
@@ -21,6 +30,7 @@ Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 
 	m_prevId = -666;
 
+	m_originalFuelValue = t_value;
 	m_fuelValue = t_value;
 }
 
@@ -58,6 +68,15 @@ void Town::setChecked(bool t_checked)
 void Town::setCurrentFuel(float t_fuel)
 {
 	m_currentFuel = t_fuel;
+}
+
+void Town::useFuelValue()
+{
+	m_fuelValue = 0;
+}
+void Town::resetFuelValue()
+{
+	m_fuelValue = m_originalFuelValue;
 }
 
 void Town::setColor(sf::Color t_color)
