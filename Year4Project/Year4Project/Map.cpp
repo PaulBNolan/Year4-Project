@@ -54,7 +54,15 @@ void Map::generatePath(int t_startId, int t_targetId)
 			m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000,0);
 			m_townList[i]->setChecked(false);
 		}
-		m_townList[i]->setColor(sf::Color::Yellow);
+
+		if (m_townList[i]->getFuelValue() == 0)
+		{
+			m_townList[i]->setColor(sf::Color::Yellow);
+		}
+		else
+		{
+			m_townList[i]->setColor(sf::Color::Cyan);
+		}
 		m_townList[i]->setCurrentFuel(0);
 	}
 
@@ -85,10 +93,11 @@ void Map::generatePath(int t_startId, int t_targetId)
 
 	auto m_checkTimeStart = std::chrono::high_resolution_clock::now();
 
-	while (m_searchQue.size() != 0 && m_searchQue.front()->getID() != t_targetId)
+	while (m_searchQue.size() != 0 && m_searchQue.back()->getID() != t_targetId)
 	{
-		int m_currentTownId = m_searchQue.front()->getID();
-		for (int i = 0; i < m_searchQue.front()->getRelatedIds().size(); i++)
+		std::vector<Town*> searchedTowns;
+		int m_currentTownId = m_searchQue.back()->getID();
+		for (int i = 0; i < m_searchQue.back()->getRelatedIds().size(); i++)
 		{ 
 			int m_roadIndex = m_townList[m_currentTownId]->getRelatedIds()[i];
 			int m_townIndex;
@@ -101,8 +110,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 				}
 			}
 
-
-			std::cout << "Size: " << m_searchQue.front()->getRelatedIds().size() << std::endl;
+			std::cout << "Size: " << m_searchQue.back()->getRelatedIds().size() << std::endl;
 			std::cout << m_currentTownId <<" Checking Town: " << m_townIndex << std::endl;
 			if (m_roadList[m_roadIndex]->getActive())
 			{
@@ -111,7 +119,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 				int m_prevId = m_townList[m_currentTownId]->getPrevId();
 
 				float m_estimatedFuelCost = m_townList[m_currentTownId]->getCurrentFuel() - m_roadList[m_roadIndex]->getWeight();
-
+				//std::cout << m_estimatedFuelCost << std::endl;
 				if (m_townIndex != m_prevId && m_estimatedFuelCost >= 0)
 				{
 					//std::cout << m_townList[m_currentTownId]->getCurrentFuel() << " " << m_roadList[m_roadIndex]->getWeight() << std::endl;
@@ -135,6 +143,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 						m_townList[m_townIndex]->useFuelValue();
 						m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
 						m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_townList[m_currentTownId]->getAccumaltedCost());
+
 					}
 					else
 					{
@@ -144,16 +153,61 @@ void Map::generatePath(int t_startId, int t_targetId)
 					if (m_townList[m_townIndex]->getChecked() == false)
 					{
 						m_townList[m_townIndex]->setChecked(true);
-						m_searchQue.push_back(m_townList[m_townIndex]);
+		//		m_searchQue.push_back(m_townList[m_townIndex]);
+						//std::cout << m_townIndex << std::endl;
+						if (searchedTowns.size() == 0)
+						{
+							searchedTowns.push_back(m_townList[m_townIndex]);
+						}
+						else
+						{
+							int m_size = searchedTowns.size();
+							
+							for (int i = 0; i < m_size; i++)
+							{
+								//std::cout << i << std::endl;
+								if(m_townList[m_townIndex]->getHeuristic() < searchedTowns.back()->getHeuristic())
+								{
+									searchedTowns.push_back(m_townList[m_townIndex]);
+								}
+								else if (m_townList[m_townIndex]->getHeuristic() > searchedTowns.front()->getHeuristic())
+								{
+									searchedTowns.insert(searchedTowns.begin(),m_townList[m_townIndex]);
+								}
+								else if(i > 0)
+								{
+									if (m_townList[m_townIndex]->getHeuristic() > searchedTowns[i]->getHeuristic()
+										&&
+										m_townList[m_townIndex]->getHeuristic() < searchedTowns[i - 1]->getHeuristic())
+									{
+										searchedTowns.insert(searchedTowns.begin() + i, m_townList[m_townIndex]);
+									}
+								}
+							}
+
+						}
+
+						if (m_townIndex == t_targetId)
+						{
+							break;
+						}
 					}
 				}
 			}
 		}
-		m_searchQue.erase(m_searchQue.begin());
+		//m_searchQue.erase(m_searchQue.begin());
+		m_searchQue.pop_back();
+		for (int i = 0; i < searchedTowns.size(); i++)
+		{
+			if (searchedTowns.size() > 0)
+			{
+				m_searchQue.push_back(searchedTowns[i]);
+			}
+		}
 	}
 	int m_currentIndex = t_targetId;
 	m_path.clear();
-	std::cout << "Path Start" << std::endl;
+
 	while (m_currentIndex != -666)
 	{
 		if (m_currentIndex == t_targetId && m_townList[m_currentIndex]->getPrevId() == -666)
@@ -178,10 +232,10 @@ void Map::generatePath(int t_startId, int t_targetId)
 			//The target node should have the complete list.
 			if (m_currentIndex == t_startId)
 			{
+				m_townList[m_currentIndex]->setColor(sf::Color::Green);
 				break;
 			}
 	}
-	std::cout << "Path End" << std::endl;
 
 	auto m_checkTimeEnd = std::chrono::high_resolution_clock::now();
 

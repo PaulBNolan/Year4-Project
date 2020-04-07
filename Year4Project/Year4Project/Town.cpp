@@ -13,7 +13,7 @@ Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 	}
 	else
 	{
-		m_town.setFillColor(sf::Color::Magenta);
+		m_town.setFillColor(sf::Color::Cyan);
 	}
 
 	m_center = sf::Vector2f(t_position.x + radius, t_position.y + radius);
