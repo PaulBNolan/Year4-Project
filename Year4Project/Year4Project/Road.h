@@ -1,6 +1,7 @@
 #ifndef ROAD
 #define ROAD
 #include "Town.h"
+#include "Tiles.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 class Road
@@ -21,10 +22,13 @@ private:
 	int m_connectedTownIds[2];
 	sf::Vector2f m_position[2];
 	sf::Vertex m_road[2];
-	std::vector<std::vector<sf::RectangleShape>> m_roadTiles;
+	//std::vector<std::vector<sf::RectangleShape>> m_roadTiles;
+	std::vector<std::vector<Tiles*>> m_roadTiless;
 
 	int m_id;
 	int m_widthValue;
+	int rowNo;
+
 	float m_weight;
 
 	bool m_checked;

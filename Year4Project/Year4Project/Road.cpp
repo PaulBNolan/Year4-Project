@@ -10,9 +10,10 @@ void Road::render(sf::RenderWindow& t_window)
 {
 	for (int i = 0; i < 5; i++)
 	{
-		for (int j = 0; j < 3; j++)
+		for (int j = 0; j < rowNo; j++)
 		{
-			t_window.draw(m_roadTiles[i][j]);
+			//t_window.draw(m_roadTiles[i][j]);
+			m_roadTiless[i][j]->render(t_window);
 		}
 	}
 }
@@ -49,8 +50,13 @@ void Road::setPositions(sf::Vector2f t_position)
 			m_road[i].position = m_position[i];
 		}
 		m_weight = sqrt(pow(m_position[0].x - m_position[1].x, 2) + pow(m_position[0].y - m_position[1].y, 2));
-		m_length = (m_weight) / 3;
-		m_tileColumnDisplacement = sf::Vector2f((m_position[0].x - m_position[1].x) / 3, (m_position[0].y - m_position[1].y) / 3);
+
+		int columnNo = 5;
+		rowNo = (m_weight) / m_widthValue;
+
+		m_length = (m_weight) / rowNo;
+		m_tileColumnDisplacement = sf::Vector2f((m_position[0].x - m_position[1].x) / rowNo,
+			(m_position[0].y - m_position[1].y) / rowNo);
 		m_width = m_widthValue;
 
 		m_angle = atan2(m_position[0].x - m_position[1].x, m_position[1].y - m_position[0].y) * (180 / (22.0 / 7.0));
@@ -60,25 +66,40 @@ void Road::setPositions(sf::Vector2f t_position)
 
 		for (int i = 0; i < 5; i++)
 		{
-			m_roadTiles.push_back(std::vector<sf::RectangleShape>());
-			for (int j = 0; j < 3; j++)
-			{
-				m_roadTiles[i].push_back(sf::RectangleShape());
 
-				m_roadTiles[i][j].setRotation(m_angle);
-				if (i != 0 && i % 2 != 0)
+			m_roadTiless.push_back(std::vector<Tiles*>());
+			for (int j = 0; j < rowNo; j++)
+			{
+				sf::Vector2f position = sf::Vector2f(m_position[0].x + (m_tileColumnDisplacement.x * -j) + (m_tileRowDisplacement.x * (-i + 2.5)),
+					m_position[0].y + (m_tileColumnDisplacement.y * -j) + (m_tileRowDisplacement.y * (-i + 2.5)));
+
+				m_roadTiless[i].push_back(
+					new Tiles(sf::Vector2f(m_width, m_length),
+						m_angle,
+						position));
+
+				if (i != 0 && i != columnNo - 1 && i != (columnNo - 1) / 2 
+					&& 
+					(j > 0 && j < rowNo - 1))
 				{
-					m_roadTiles[i][j].setFillColor(sf::Color::Red);
+					m_roadTiless[i][j]->setType(TileType::Path);
+				}
+				else if ((j == 0 && i > 0 && i < (columnNo - 1) / 2)
+					||
+					(j == rowNo - 1 && i < columnNo - 1 && i > (columnNo - 1) / 2))
+				{
+					m_roadTiless[i][j]->setType(TileType::Entrance);
+				}
+				else if ((j == rowNo - 1 && i > 0 && i < (columnNo - 1) / 2)
+					||
+					(j == 0 && i < columnNo - 1 && i >(columnNo - 1) / 2))
+				{
+					m_roadTiless[i][j]->setType(TileType::Exit);
 				}
 				else
 				{
-					m_roadTiles[i][j].setFillColor(sf::Color::Blue);
+					m_roadTiless[i][j]->setType(TileType::Wall);
 				}
-
-				m_roadTiles[i][j].setSize(sf::Vector2f(m_width, m_length));
-				m_roadTiles[i][j].setPosition(
-					sf::Vector2f(m_position[0].x + (m_tileColumnDisplacement.x * -j) + (m_tileRowDisplacement.x * (-i + 2.5)),
-						m_position[0].y + (m_tileColumnDisplacement.y * -j) + (m_tileRowDisplacement.y * (-i + 2.5))));
 			}
 		}
 	}

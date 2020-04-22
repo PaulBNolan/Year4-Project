@@ -1,19 +1,25 @@
-﻿  Map.cpp
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(5,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(9,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(19,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(21,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(48,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(54,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(69,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(100,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(117,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(128,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(129,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(200,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(258,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(261,24): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(280,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(288,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(293,20): warning C4018: '<': signed/unsigned mismatch
+﻿  Road.cpp
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(55,22): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(60,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(62,89): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244:         with
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244:         [
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244:             T=float
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244:         ]
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244:         with
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244:         [
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244:             T=float
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244:         ]
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244:         with
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244:         [
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244:             T=float
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244:         ]
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244:         with
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244:         [
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244:             T=float
+C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244:         ]
   Year4Project.vcxproj -> C:\Users\paul\Desktop\Year4-Project\Year4Project\Debug\Year4Project.exe
