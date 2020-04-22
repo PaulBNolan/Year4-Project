@@ -37,6 +37,7 @@ void Tiles::setType(TileType t_type)
 
 void Tiles::setPosition(sf::Vector2f t_position)
 {
+	m_position = t_position;
 	m_body.setPosition(t_position);
 }
 

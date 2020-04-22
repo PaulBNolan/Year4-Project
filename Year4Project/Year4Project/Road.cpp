@@ -13,7 +13,7 @@ void Road::render(sf::RenderWindow& t_window)
 		for (int j = 0; j < rowNo; j++)
 		{
 			//t_window.draw(m_roadTiles[i][j]);
-			m_roadTiless[i][j]->render(t_window);
+			m_roadTiles[i][j]->render(t_window);
 		}
 	}
 }
@@ -66,14 +66,13 @@ void Road::setPositions(sf::Vector2f t_position)
 
 		for (int i = 0; i < 5; i++)
 		{
-
-			m_roadTiless.push_back(std::vector<Tiles*>());
+			m_roadTiles.push_back(std::vector<Tiles*>());
 			for (int j = 0; j < rowNo; j++)
 			{
 				sf::Vector2f position = sf::Vector2f(m_position[0].x + (m_tileColumnDisplacement.x * -j) + (m_tileRowDisplacement.x * (-i + 2.5)),
 					m_position[0].y + (m_tileColumnDisplacement.y * -j) + (m_tileRowDisplacement.y * (-i + 2.5)));
 
-				m_roadTiless[i].push_back(
+				m_roadTiles[i].push_back(
 					new Tiles(sf::Vector2f(m_width, m_length),
 						m_angle,
 						position));
@@ -82,23 +81,23 @@ void Road::setPositions(sf::Vector2f t_position)
 					&& 
 					(j > 0 && j < rowNo - 1))
 				{
-					m_roadTiless[i][j]->setType(TileType::Path);
+					m_roadTiles[i][j]->setType(TileType::Path);
 				}
 				else if ((j == 0 && i > 0 && i < (columnNo - 1) / 2)
 					||
 					(j == rowNo - 1 && i < columnNo - 1 && i > (columnNo - 1) / 2))
 				{
-					m_roadTiless[i][j]->setType(TileType::Entrance);
+					m_roadTiles[i][j]->setType(TileType::Entrance);
 				}
 				else if ((j == rowNo - 1 && i > 0 && i < (columnNo - 1) / 2)
 					||
 					(j == 0 && i < columnNo - 1 && i >(columnNo - 1) / 2))
 				{
-					m_roadTiless[i][j]->setType(TileType::Exit);
+					m_roadTiles[i][j]->setType(TileType::Exit);
 				}
 				else
 				{
-					m_roadTiless[i][j]->setType(TileType::Wall);
+					m_roadTiles[i][j]->setType(TileType::Wall);
 				}
 			}
 		}
@@ -128,4 +127,9 @@ float Road::getWeight()
 bool Road::getActive()
 {
 	return m_active;
+}
+
+std::vector<std::vector<Tiles*>> Road::getTiles()
+{
+	return m_roadTiles;
 }

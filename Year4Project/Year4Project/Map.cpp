@@ -206,7 +206,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 		}
 	}
 	int m_currentIndex = t_targetId;
-	m_path.clear();
+	m_roughPath.clear();
 
 	while (m_currentIndex != -666)
 	{
@@ -218,7 +218,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 		{
 			//std::cout << m_currentIndex << std::endl;
 			//std::cout << m_townList[m_currentIndex]->getCurrentFuel() << std::endl;
-			m_path.push_back(m_townList[m_currentIndex]);
+			m_roughPath.push_back(m_townList[m_currentIndex]);
 			m_townList[m_currentIndex]->setColor(sf::Color::Green);
 		}
 			m_currentIndex = m_townList[m_currentIndex]->getPrevId();
@@ -236,6 +236,41 @@ void Map::generatePath(int t_startId, int t_targetId)
 				break;
 			}
 	}
+
+	m_path.clear();
+	m_path.push_back(m_roughPath.front()->getCenter());
+	int index = 1;
+	int m_currentRoadIndex;
+	while (m_path.back() != m_roughPath.back()->getCenter())
+	{
+		for (int i = 0; i < m_roughPath[index - 1]->getRelatedIds().size(); i++)
+		{
+			for (int j = 0; j < m_roughPath[index]->getRelatedIds().size(); j++)
+			{
+				if (m_roughPath[index - 1]->getRelatedIds()[i] == m_roughPath[index]->getRelatedIds()[j])
+				{
+					m_currentRoadIndex = m_roughPath[index]->getRelatedIds()[j];
+				}
+			}
+		}
+
+		if (getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][0]->getPosition(), m_roughPath[index - 1]->getPosition()) 
+			< getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition(), 
+				m_roughPath[index - 1]->getPosition()))
+		{
+			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][0]->getPosition());
+			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
+		}
+		else
+		{
+			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
+			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][0]->getPosition());
+		}
+
+		m_path.push_back(m_roughPath[index]->getCenter());
+		index++;
+	}
+
 
 	auto m_checkTimeEnd = std::chrono::high_resolution_clock::now();
 

@@ -1,11 +1,11 @@
 #include "Car.h"
 
-Car::Car(std::vector<Town*> &t_path):
-	m_path(t_path)
+Car::Car(std::vector<sf::Vector2f> &t_path):
+	m_roughPath(t_path)
 {
 	m_position = sf::Vector2f(50, 50);
 
-	m_body.setRadius(5);
+	m_body.setRadius(2);
 	m_body.setOrigin(sf::Vector2f(5, 5));
 	m_body.setPosition(m_position);
 	m_body.setFillColor(sf::Color::Yellow);
@@ -14,22 +14,22 @@ Car::Car(std::vector<Town*> &t_path):
 void Car::update()
 {
 	
-	if (m_path.size() != 0)
+	if (m_roughPath.size() != 0)
 	{
 		if (m_velocity == sf::Vector2f(0, 0))
 		{
-			m_angle = atan2(m_position.y - m_path.back()->getCenter().y, m_position.x - m_path.back()->getCenter().x);
-			m_velocity = sf::Vector2f(3 * cos(m_angle), 3 * sin(m_angle));
+			m_angle = atan2(m_position.y - m_roughPath.back().y, m_position.x - m_roughPath.back().x);
+			m_velocity = sf::Vector2f(cos(m_angle), sin(m_angle));
 		}
 
-		if (getDistance(m_position, m_path.back()->getCenter()) < 10)
+		if (getDistance(m_position, m_roughPath.back()) < 4)
 		{
 			//std::cout << "Fuel " << m_path.back()->getCurrentFuel() << std::endl;
-			m_path.pop_back();
-			if (m_path.size() > 0)
+			m_roughPath.pop_back();
+			if (m_roughPath.size() > 0)
 			{
-				m_angle = atan2(m_position.y - m_path.back()->getCenter().y, m_position.x - m_path.back()->getCenter().x);
-				m_velocity = sf::Vector2f(3 * cos(m_angle), 3 * sin(m_angle));
+				m_angle = atan2(m_position.y - m_roughPath.back().y, m_position.x - m_roughPath.back().x);
+				m_velocity = sf::Vector2f(cos(m_angle), sin(m_angle));
 			}
 		}
 

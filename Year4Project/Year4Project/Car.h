@@ -5,7 +5,7 @@
 class Car
 {
 public:
-	Car(std::vector<Town*> &t_path);
+	Car(std::vector<sf::Vector2f> &t_path);
 
 	void update();
 	void render(sf::RenderWindow& t_window);
@@ -27,7 +27,7 @@ private:
 
 	float m_angle;
 
-	std::vector<Town*> &m_path;
+	std::vector<sf::Vector2f> &m_roughPath;
 
 	int m_widthValue;
 };

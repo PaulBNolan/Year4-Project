@@ -1,25 +1,2 @@
-﻿  Road.cpp
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(55,22): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(60,13): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(62,89): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244:         with
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244:         [
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244:             T=float
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(65,12): warning C4244:         ]
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244:         with
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244:         [
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244:             T=float
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(64,48): warning C4244:         ]
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244:         with
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244:         [
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244:             T=float
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(74,58): warning C4244:         ]
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244:         with
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244:         [
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244:             T=float
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Road.cpp(73,94): warning C4244:         ]
+﻿  Car.cpp
   Year4Project.vcxproj -> C:\Users\paul\Desktop\Year4-Project\Year4Project\Debug\Year4Project.exe

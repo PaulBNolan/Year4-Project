@@ -15,11 +15,12 @@ public:
 	void processLeftMouseKey(sf::Vector2f t_carPos, sf::Vector2i t_pos);
 	void render(sf::RenderWindow& t_window);
 
-	std::vector<Town*> getPath()
+	std::vector<sf::Vector2f> getPath()
 	{
 		return m_path;
 	}
-	std::vector<Town*> m_path;
+	std::vector<Town*> m_roughPath;
+	std::vector<sf::Vector2f> m_path;
 private:
 	std::vector<Town*> m_townList;
 	std::vector<Road*> m_roadList;
