@@ -17,15 +17,25 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1200, 600}, "SFML Game" },
+	m_window{ sf::VideoMode{ 1350, 700}, "SFML Game" },
 	m_exitGame{false} //when true game will exit
 {
+	m_window.setPosition(sf::Vector2i(0, 0));
+
 	LoadMap::load(m_mapData);
 
 	setupFontAndText(); // load font 
 	setupSprite(); // load texture
 	m_map = new Map(m_mapData);
 	m_car = new Car(m_map->m_path);
+
+	m_multiObjectiveHudBox.setPosition(sf::Vector2f(0, 550));
+	m_multiObjectiveHudBox.setSize(sf::Vector2f(550,75));
+	m_multiObjectiveHudBox.setFillColor(sf::Color::Red);
+
+	m_aStarHudBox.setPosition(sf::Vector2f(0, 625));
+	m_aStarHudBox.setSize(sf::Vector2f(550, 75));
+	m_aStarHudBox.setFillColor(sf::Color::Blue);
 }
 
 /// <summary>
@@ -136,6 +146,17 @@ void Game::render()
 	//m_window.draw(m_logoSprite);
 	m_map->render(m_window);
 	m_car->render(m_window);
+
+	m_window.draw(m_multiObjectiveHudBox);
+	m_window.draw(m_multiObjectiveText);
+	m_window.draw(m_multiObjectiveTimeText);
+	m_window.draw(m_multiObjectivePathText);
+
+	m_window.draw(m_aStarHudBox);
+	m_window.draw(m_aStarText);
+	m_window.draw(m_aStarTimeText);
+	m_window.draw(m_aStarPathText);
+
 	m_window.display();
 }
 
@@ -148,14 +169,50 @@ void Game::setupFontAndText()
 	{
 		std::cout << "problem loading arial black font" << std::endl;
 	}
-	m_welcomeMessage.setFont(m_ArialBlackfont);
+	/*m_welcomeMessage.setFont(m_ArialBlackfont);
 	m_welcomeMessage.setString("SFML Game");
 	m_welcomeMessage.setStyle(sf::Text::Underlined | sf::Text::Italic | sf::Text::Bold);
 	m_welcomeMessage.setPosition(40.0f, 40.0f);
 	m_welcomeMessage.setCharacterSize(80U);
 	m_welcomeMessage.setOutlineColor(sf::Color::Red);
 	m_welcomeMessage.setFillColor(sf::Color::Black);
-	m_welcomeMessage.setOutlineThickness(3.0f);
+	m_welcomeMessage.setOutlineThickness(3.0f);*/
+
+	m_multiObjectiveText.setFont(m_ArialBlackfont);
+	m_multiObjectiveText.setCharacterSize(20);
+	m_multiObjectiveText.setFillColor(sf::Color::Black);
+	m_multiObjectiveText.setPosition(sf::Vector2f(2.5, 577.5));
+	m_multiObjectiveText.setString("Fuel Algorithm");
+
+	m_multiObjectiveTimeText.setFont(m_ArialBlackfont);
+	m_multiObjectiveTimeText.setCharacterSize(20);
+	m_multiObjectiveTimeText.setFillColor(sf::Color::Black);
+	m_multiObjectiveTimeText.setPosition(sf::Vector2f(200, 557.5));
+	m_multiObjectiveTimeText.setString("Time");
+
+	m_multiObjectivePathText.setFont(m_ArialBlackfont);
+	m_multiObjectivePathText.setCharacterSize(20);
+	m_multiObjectivePathText.setFillColor(sf::Color::Black);
+	m_multiObjectivePathText.setPosition(sf::Vector2f(200, 582.5));
+	m_multiObjectivePathText.setString("Path");
+
+	m_aStarText.setFont(m_ArialBlackfont);
+	m_aStarText.setCharacterSize(20);
+	m_aStarText.setFillColor(sf::Color::Black);
+	m_aStarText.setPosition(sf::Vector2f(2.5, 652.5));
+	m_aStarText.setString("A Star Algorithm");
+
+	m_aStarTimeText.setFont(m_ArialBlackfont);
+	m_aStarTimeText.setCharacterSize(20);
+	m_aStarTimeText.setFillColor(sf::Color::Black);
+	m_aStarTimeText.setPosition(sf::Vector2f(200, 632.5));
+	m_aStarTimeText.setString("Time");
+
+	m_aStarPathText.setFont(m_ArialBlackfont);
+	m_aStarPathText.setCharacterSize(20);
+	m_aStarPathText.setFillColor(sf::Color::Black);
+	m_aStarPathText.setPosition(sf::Vector2f(200, 657.5));
+	m_aStarPathText.setString("Path");
 
 }
 

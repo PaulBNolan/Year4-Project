@@ -12,6 +12,7 @@ public:
 	Map(MapData t_map);
 
 	void generatePath(int t_startId, int t_endId);
+	void generatePathAStar(int t_startId, int t_endId);
 	void processLeftMouseKey(sf::Vector2f t_carPos, sf::Vector2i t_pos);
 	void render(sf::RenderWindow& t_window);
 

@@ -27,6 +27,10 @@ public:
 	void resetFuelValue();
 	float getFuelValue();
 
+	void setPrevIds(std::vector<int> t_currentPrev, int t_id);
+	void clearPrevIds();
+	std::vector<int> getPrevIds();
+
 	void setPrevId(int t_id);
 	int getPrevId();
 
@@ -52,7 +56,9 @@ private:
 	float m_currentFuel;
 
 
+	std::vector<int> m_prevIds;
 	int m_prevId;
+
 	bool m_checked;
 	sf::Text m_IdText;
 	sf::Font m_font;

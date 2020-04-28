@@ -28,7 +28,6 @@ Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 
 	m_IdText.setFont(m_font);
 
-	m_prevId = -666;
 
 	m_originalFuelValue = t_value;
 	m_fuelValue = t_value;
@@ -53,6 +52,17 @@ void Town::setHeuristic(sf::Vector2f t_dest)
 void Town::setAccumaltedCost(float t_roadWeight, float t_prevCost)
 {
 	m_accumulatedCost = t_prevCost + t_roadWeight;
+}
+
+void Town::setPrevIds(std::vector<int> t_currentPrev, int t_id)
+{
+	m_prevIds = t_currentPrev;
+	m_prevIds.push_back(t_id);
+}
+
+void Town::clearPrevIds()
+{
+	m_prevIds.clear();
 }
 
 void Town::setPrevId(int t_id)
@@ -97,6 +107,11 @@ sf::Vector2f Town::getCenter()
 int Town::getID()
 {
 	return m_townId;
+}
+
+std::vector<int> Town::getPrevIds()
+{
+	return m_prevIds;
 }
 
 int Town::getPrevId()

@@ -51,6 +51,70 @@ Towns:
     Position X: 500
     Position Y: 350
     Value: 1000
+  - Name: "Team 14"
+    Position X: 150
+    Position Y: 500
+    Value: 1000
+  - Name: "Team 15"
+    Position X: 500
+    Position Y: 50
+    Value: 0
+  - Name: "Team 16"
+    Position X: 500
+    Position Y: 500
+    Value: 0
+  - Name: "Team 17"
+    Position X: 500
+    Position Y: 200
+    Value: 0
+  - Name: "Team 18"
+    Position X: 700
+    Position Y: 200
+    Value: 0
+  - Name: "Team 19"
+    Position X: 700
+    Position Y: 50
+    Value: 0
+  - Name: "Team 20"
+    Position X: 700
+    Position Y: 350
+    Value: 0
+  - Name: "Team 21"
+    Position X: 900
+    Position Y: 350
+    Value: 0
+  - Name: "Team 22"
+    Position X: 900
+    Position Y: 500
+    Value: 0
+  - Name: "Team 23"
+    Position X: 1100
+    Position Y: 350
+    Value: 0
+  - Name: "Team 24"
+    Position X: 1100
+    Position Y: 200
+    Value: 0
+  - Name: "Team 25"
+    Position X: 700
+    Position Y: 600
+    Value: 0
+  - Name: "Team 26"
+    Position X: 900 
+    Position Y: 50
+    Value: 0
+  - Name: "Team 27"
+    Position X: 1300
+    Position Y: 650
+    Value: 0
+  - Name: "Team 28"
+    Position X: 1100
+    Position Y: 500
+    Value: 0
+  - Name: "Team 29"
+    Position X: 1300
+    Position Y: 50
+    Value: 0
 Roads:
   - Id1: 0
     Id2: 1
@@ -103,9 +167,78 @@ Roads:
   - Id1: 11
     Id2: 9
     Width: 2
-  # - Id1: 12
-  #   Id2: 9
-  #   Width: 2
   - Id1: 11
     Id2: 4
     Width: 2
+  - Id1: 10
+    Id2: 13
+    Width: 2
+  - Id1: 10
+    Id2: 15
+    Width: 2
+  - Id1: 8
+    Id2: 14
+    Width: 2
+  - Id1: 15
+    Id2: 24
+    Width: 2
+  - Id1: 21
+    Id2: 24
+    Width: 2
+  - Id1: 21
+    Id2: 27
+    Width: 2
+  - Id1: 27 
+    Id2: 26
+    Width: 2
+  - Id1: 25
+    Id2: 23
+    Width: 2
+  - Id1: 23
+    Id2: 22
+    Width: 2
+  - Id1: 22
+    Id2: 27
+    Width: 2
+  - Id1: 20
+    Id2: 21
+    Width: 2
+  - Id1: 19
+    Id2: 20
+    Width: 2
+  - Id1: 17
+    Id2: 19
+    Width: 2
+  - Id1: 14
+    Id2: 17
+    Width: 2
+  - Id1: 17
+    Id2: 25
+    Width: 2
+  - Id1: 14
+    Id2: 18
+    Width: 2
+  - Id1: 16
+    Id2: 17
+    Width: 2
+  - Id1: 23
+    Id2: 28
+    Width: 2
+  - Id1: 8
+    Id2: 16
+    Width: 1
+  - Id1: 11
+    Id2: 13
+    Width: 1
+  - Id1: 12
+    Id2: 19
+    Width: 1
+  - Id1: 18
+    Id2: 25
+    Width: 1
+  - Id1: 19
+    Id2: 24
+    Width: 1
+  - Id1: 20
+    Id2: 22
+    Width: 1

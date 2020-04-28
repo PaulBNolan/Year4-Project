@@ -43,6 +43,16 @@ private:
 	Map* m_map;
 	MapData m_mapData;
 	Car* m_car;
+
+	sf::RectangleShape m_multiObjectiveHudBox;
+	sf::Text m_multiObjectiveText;
+	sf::Text m_multiObjectiveTimeText;
+	sf::Text m_multiObjectivePathText;
+
+	sf::RectangleShape m_aStarHudBox;
+	sf::Text m_aStarText;
+	sf::Text m_aStarTimeText;
+	sf::Text m_aStarPathText;
 };
 
 #endif // !GAME_HPP
