@@ -49,7 +49,7 @@ void Car::setType(CarType t_type)
 	switch (t_type)
 	{
 	case CarType::Small:
-		m_body.setRadius(1);
+		m_body.setRadius(1.9);
 		m_body.setOrigin(sf::Vector2f(1, 1));
 		m_body.setPosition(m_position);
 		m_body.setFillColor(sf::Color::Red);
@@ -76,7 +76,14 @@ void Car::setType(CarType t_type)
 
 float Car::getWidth()
 {
-	return m_body.getRadius();
+	if (m_body.getFillColor() != sf::Color::Red)
+	{
+		return m_body.getRadius();
+	}
+	else
+	{
+		return 1.0f;
+	}
 }
 
 float Car::getFuel()

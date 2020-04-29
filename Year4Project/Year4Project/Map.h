@@ -14,6 +14,8 @@ public:
 
 	void setHud();
 
+	void update();
+
 	void generatePath(int t_startId, int t_endId);
 	void generatePathAStar(int t_startId, int t_endId);
 	void processMouseClick(sf::Vector2f t_carPos, sf::Vector2i t_pos);
@@ -25,6 +27,7 @@ public:
 	}
 	std::vector<Town*> m_roughPath;
 	std::vector<sf::Vector2f> m_path;
+	std::vector<Town*> m_aStarRoughPath;
 	std::vector<sf::Vector2f> m_aStarPath;
 private:
 	std::vector<Town*> m_townList;
@@ -44,6 +47,7 @@ private:
 	sf::Text m_multiObjectiveText;
 	sf::Text m_multiObjectiveTimeText;
 	sf::Text m_multiObjectivePathText;
+	sf::Text m_multiObjectiveFuelText;
 	std::vector<sf::Text> m_nodeText;
 	std::string m_multiObjectiveTimeString;
 	std::string m_multiObjectivePathString;
