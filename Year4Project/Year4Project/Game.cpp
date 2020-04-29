@@ -26,16 +26,11 @@ Game::Game() :
 
 	setupFontAndText(); // load font 
 	setupSprite(); // load texture
-	m_map = new Map(m_mapData);
+	m_map = new Map(m_mapData,m_ArialBlackfont, m_car);
 	m_car = new Car(m_map->m_path);
+	m_menu = new Menu(m_ArialBlackfont);
 
-	m_multiObjectiveHudBox.setPosition(sf::Vector2f(0, 550));
-	m_multiObjectiveHudBox.setSize(sf::Vector2f(550,75));
-	m_multiObjectiveHudBox.setFillColor(sf::Color::Red);
-
-	m_aStarHudBox.setPosition(sf::Vector2f(0, 625));
-	m_aStarHudBox.setSize(sf::Vector2f(550, 75));
-	m_aStarHudBox.setFillColor(sf::Color::Blue);
+	m_state = State::MenuSelect;
 }
 
 /// <summary>
@@ -62,12 +57,12 @@ void Game::run()
 	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
 	while (m_window.isOpen())
 	{
-		processEvents(); // as many as possible
+		processMouseClick(); // as many as possible
 		timeSinceLastUpdate += clock.restart();
 		while (timeSinceLastUpdate > timePerFrame)
 		{
 			timeSinceLastUpdate -= timePerFrame;
-			processEvents(); // at least 60 fps
+			processMouseClick(); // at least 60 fps
 			update(timePerFrame); //60 fps
 		}
 		render(); // as many as possible
@@ -78,7 +73,7 @@ void Game::run()
 /// get key presses/ mouse moves etc. from OS
 /// and user :: Don't do game update here
 /// </summary>
-void Game::processEvents()
+void Game::processMouseClick()
 {
 	sf::Event newEvent;
 	while (m_window.pollEvent(newEvent))
@@ -93,9 +88,21 @@ void Game::processEvents()
 		}
 		else if (sf::Event::MouseButtonPressed == newEvent.type)
 		{
-			if (m_map->getPath().size() == 0)
+			switch (m_state)
 			{
-				processLeftMouseKey();
+			case State::MenuSelect:
+				if (m_menu->processMouseClick(sf::Mouse::getPosition(m_window), m_car))
+				{
+					m_state = State::Game;
+				}
+				
+				break;
+			case State::Game:
+				if (m_map->getPath().size() == 0)
+				{
+					m_map->processMouseClick(m_car->getPosition(), sf::Mouse::getPosition(m_window));
+				}
+				break;
 			}
 		}
 	}
@@ -108,16 +115,21 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Escape == t_event.key.code)
+	switch (m_state)
 	{
-		m_exitGame = true;
+	case State::MenuSelect:
+		if (sf::Keyboard::Escape == t_event.key.code)
+		{
+			m_exitGame = true;
+		}
+	case State::Game:
+		if (sf::Keyboard::Escape == t_event.key.code)
+		{
+			m_state = State::MenuSelect;
+		}
 	}
 }
 
-void Game::processLeftMouseKey()
-{
-	m_map->processLeftMouseKey(m_car->getPosition(),sf::Mouse::getPosition(m_window));
-}
 
 /// <summary>
 /// Update the game world
@@ -142,21 +154,17 @@ void Game::update(sf::Time t_deltaTime)
 void Game::render()
 {
 	m_window.clear();
-	//m_window.draw(m_welcomeMessage);
-	//m_window.draw(m_logoSprite);
-	m_map->render(m_window);
-	m_car->render(m_window);
 
-	m_window.draw(m_multiObjectiveHudBox);
-	m_window.draw(m_multiObjectiveText);
-	m_window.draw(m_multiObjectiveTimeText);
-	m_window.draw(m_multiObjectivePathText);
-
-	m_window.draw(m_aStarHudBox);
-	m_window.draw(m_aStarText);
-	m_window.draw(m_aStarTimeText);
-	m_window.draw(m_aStarPathText);
-
+	switch (m_state)
+	{
+	case State::MenuSelect:
+		m_menu->render(m_window);
+		break;
+	case State::Game:
+		m_map->render(m_window);
+		m_car->render(m_window);
+		break;
+	}
 	m_window.display();
 }
 
@@ -169,50 +177,6 @@ void Game::setupFontAndText()
 	{
 		std::cout << "problem loading arial black font" << std::endl;
 	}
-	/*m_welcomeMessage.setFont(m_ArialBlackfont);
-	m_welcomeMessage.setString("SFML Game");
-	m_welcomeMessage.setStyle(sf::Text::Underlined | sf::Text::Italic | sf::Text::Bold);
-	m_welcomeMessage.setPosition(40.0f, 40.0f);
-	m_welcomeMessage.setCharacterSize(80U);
-	m_welcomeMessage.setOutlineColor(sf::Color::Red);
-	m_welcomeMessage.setFillColor(sf::Color::Black);
-	m_welcomeMessage.setOutlineThickness(3.0f);*/
-
-	m_multiObjectiveText.setFont(m_ArialBlackfont);
-	m_multiObjectiveText.setCharacterSize(20);
-	m_multiObjectiveText.setFillColor(sf::Color::Black);
-	m_multiObjectiveText.setPosition(sf::Vector2f(2.5, 577.5));
-	m_multiObjectiveText.setString("Fuel Algorithm");
-
-	m_multiObjectiveTimeText.setFont(m_ArialBlackfont);
-	m_multiObjectiveTimeText.setCharacterSize(20);
-	m_multiObjectiveTimeText.setFillColor(sf::Color::Black);
-	m_multiObjectiveTimeText.setPosition(sf::Vector2f(200, 557.5));
-	m_multiObjectiveTimeText.setString("Time");
-
-	m_multiObjectivePathText.setFont(m_ArialBlackfont);
-	m_multiObjectivePathText.setCharacterSize(20);
-	m_multiObjectivePathText.setFillColor(sf::Color::Black);
-	m_multiObjectivePathText.setPosition(sf::Vector2f(200, 582.5));
-	m_multiObjectivePathText.setString("Path");
-
-	m_aStarText.setFont(m_ArialBlackfont);
-	m_aStarText.setCharacterSize(20);
-	m_aStarText.setFillColor(sf::Color::Black);
-	m_aStarText.setPosition(sf::Vector2f(2.5, 652.5));
-	m_aStarText.setString("A Star Algorithm");
-
-	m_aStarTimeText.setFont(m_ArialBlackfont);
-	m_aStarTimeText.setCharacterSize(20);
-	m_aStarTimeText.setFillColor(sf::Color::Black);
-	m_aStarTimeText.setPosition(sf::Vector2f(200, 632.5));
-	m_aStarTimeText.setString("Time");
-
-	m_aStarPathText.setFont(m_ArialBlackfont);
-	m_aStarPathText.setCharacterSize(20);
-	m_aStarPathText.setFillColor(sf::Color::Black);
-	m_aStarPathText.setPosition(sf::Vector2f(200, 657.5));
-	m_aStarPathText.setString("Path");
 
 }
 
@@ -221,11 +185,4 @@ void Game::setupFontAndText()
 /// </summary>
 void Game::setupSprite()
 {
-	if (!m_logoTexture.loadFromFile("ASSETS\\IMAGES\\SFML-LOGO.png"))
-	{
-		// simple error message if previous call fails
-		std::cout << "problem loading logo" << std::endl;
-	}
-	m_logoSprite.setTexture(m_logoTexture);
-	m_logoSprite.setPosition(300.0f, 180.0f);
 }

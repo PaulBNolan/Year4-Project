@@ -13,6 +13,10 @@
 #include "Map.h"
 #include "Car.h"
 #include "LoadMap.h"
+#include "Menu.h"
+
+enum class State { MenuSelect, Game };
+
 class Game
 {
 public:
@@ -25,9 +29,8 @@ public:
 
 private:
 
-	void processEvents();
+	void processMouseClick();
 	void processKeys(sf::Event t_event);
-	void processLeftMouseKey();
 	void update(sf::Time t_deltaTime);
 	void render();
 	
@@ -36,23 +39,15 @@ private:
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
-	sf::Text m_welcomeMessage; // text used for message on screen
-	sf::Texture m_logoTexture; // texture used for sfml logo
-	sf::Sprite m_logoSprite; // sprite used for sfml logo
+
 	bool m_exitGame; // control exiting game
 	Map* m_map;
 	MapData m_mapData;
 	Car* m_car;
 
-	sf::RectangleShape m_multiObjectiveHudBox;
-	sf::Text m_multiObjectiveText;
-	sf::Text m_multiObjectiveTimeText;
-	sf::Text m_multiObjectivePathText;
+	Menu* m_menu;
 
-	sf::RectangleShape m_aStarHudBox;
-	sf::Text m_aStarText;
-	sf::Text m_aStarTimeText;
-	sf::Text m_aStarPathText;
+	State m_state;
 };
 
 #endif // !GAME_HPP

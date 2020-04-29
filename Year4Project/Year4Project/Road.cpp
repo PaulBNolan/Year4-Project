@@ -6,14 +6,49 @@ Road::Road(int t_id, int t_width)
 	m_connectedTownIds[0] = -1;
 }
 
-void Road::render(sf::RenderWindow& t_window)
+void Road::processMouseClick(sf::Vector2i t_position)
 {
+	sf::Vector2f position = sf::Vector2f(t_position.x, t_position.y);
 	for (int i = 0; i < 5; i++)
 	{
+		bool m_clickFound = false;
 		for (int j = 0; j < rowNo; j++)
 		{
-			//t_window.draw(m_roadTiles[i][j]);
-			m_roadTiles[i][j]->render(t_window);
+			float distance = sqrt(pow(m_roadTiles[i][j]->getPosition().x - position.x, 2) +
+				pow(m_roadTiles[i][j]->getPosition().y - position.y, 2));
+
+			if (distance < m_width && m_blocked == false)
+			{
+				m_blocked = true;
+				m_clickFound = true;
+				break;
+			}
+			else if (distance < m_width && m_blocked == true)
+			{
+				m_blocked = false;
+				m_clickFound = true;
+				break;
+			}
+		}
+
+		if (m_clickFound == true)
+		{
+			break;
+		}
+	}
+}
+
+void Road::render(sf::RenderWindow& t_window)
+{
+	if (m_blocked == false)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < rowNo; j++)
+			{
+				//t_window.draw(m_roadTiles[i][j]);
+				m_roadTiles[i][j]->render(t_window);
+			}
 		}
 	}
 }
@@ -127,6 +162,11 @@ float Road::getWeight()
 bool Road::getActive()
 {
 	return m_active;
+}
+
+bool Road::getBlocked()
+{
+	return m_blocked;
 }
 
 std::vector<std::vector<Tiles*>> Road::getTiles()

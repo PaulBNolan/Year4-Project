@@ -10,11 +10,15 @@ Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 	if (t_value == 0)
 	{
 		m_town.setFillColor(sf::Color::Yellow);
+		m_town.setOutlineColor(sf::Color::Blue);
 	}
 	else
 	{
 		m_town.setFillColor(sf::Color::Cyan);
+		m_town.setOutlineColor(sf::Color::Magenta);
 	}
+
+	m_town.setOutlineThickness(2.0f);
 
 	m_center = sf::Vector2f(t_position.x + radius, t_position.y + radius);
 	m_townId = t_id;

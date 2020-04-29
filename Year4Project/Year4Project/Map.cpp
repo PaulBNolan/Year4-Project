@@ -1,6 +1,7 @@
 #include "Map.h"
 
-Map::Map(MapData t_map)
+Map::Map(MapData t_map, sf::Font t_font, Car *& t_car):
+	m_car(t_car)
 {
 	for (int i = 0; i < t_map.m_towns.size(); i++)
 	{
@@ -34,6 +35,57 @@ Map::Map(MapData t_map)
 	{
 		m_startEndIds[i] = -10;
 	}
+
+	m_font = t_font;
+
+	setHud();
+}
+
+void Map::setHud()
+{
+	m_multiObjectiveHudBox.setPosition(sf::Vector2f(0, 550));
+	m_multiObjectiveHudBox.setSize(sf::Vector2f(550, 75));
+	m_multiObjectiveHudBox.setFillColor(sf::Color::Red);
+
+	m_aStarHudBox.setPosition(sf::Vector2f(0, 625));
+	m_aStarHudBox.setSize(sf::Vector2f(550, 75));
+	m_aStarHudBox.setFillColor(sf::Color::Blue);
+
+	m_multiObjectiveText.setFont(m_font);
+	m_multiObjectiveText.setCharacterSize(20);
+	m_multiObjectiveText.setFillColor(sf::Color::Black);
+	m_multiObjectiveText.setPosition(sf::Vector2f(2.5, 577.5));
+	m_multiObjectiveText.setString("Fuel Algorithm");
+
+	m_multiObjectiveTimeText.setFont(m_font);
+	m_multiObjectiveTimeText.setCharacterSize(20);
+	m_multiObjectiveTimeText.setFillColor(sf::Color::Black);
+	m_multiObjectiveTimeText.setPosition(sf::Vector2f(200, 558.75));
+	m_multiObjectiveTimeText.setString("Time");
+
+	m_multiObjectivePathText.setFont(m_font);
+	m_multiObjectivePathText.setCharacterSize(20);
+	m_multiObjectivePathText.setFillColor(sf::Color::Black);
+	m_multiObjectivePathText.setPosition(sf::Vector2f(200, 593.75));
+	m_multiObjectivePathText.setString("Path: ");
+
+	m_aStarText.setFont(m_font);
+	m_aStarText.setCharacterSize(20);
+	m_aStarText.setFillColor(sf::Color::Black);
+	m_aStarText.setPosition(sf::Vector2f(2.5, 652.5));
+	m_aStarText.setString("A Star Algorithm");
+
+	m_aStarTimeText.setFont(m_font);
+	m_aStarTimeText.setCharacterSize(20);
+	m_aStarTimeText.setFillColor(sf::Color::Black);
+	m_aStarTimeText.setPosition(sf::Vector2f(200, 633.75));
+	m_aStarTimeText.setString("Time: ");
+
+	m_aStarPathText.setFont(m_font);
+	m_aStarPathText.setCharacterSize(20);
+	m_aStarPathText.setFillColor(sf::Color::Black);
+	m_aStarPathText.setPosition(sf::Vector2f(200, 668.75));
+	m_aStarPathText.setString("Path: ");
 }
 
 void Map::generatePath(int t_startId, int t_targetId)
@@ -67,7 +119,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 
 	for (int i = 0; i < m_roadList.size(); i++)
 	{
-		if (m_roadList[i]->getWidth() > 1)
+		if (m_roadList[i]->getWidth() >= m_car->getWidth() || (m_roadList[i]->getBlocked() == false && m_roadList[i]->getWidth() >= m_car->getWidth()))
 		{
 			m_roadList[i]->setActive(true);
 		}
@@ -77,15 +129,14 @@ void Map::generatePath(int t_startId, int t_targetId)
 		}
 	}
 
-
 	std::vector<Town*> m_searchQue;
 
 	m_searchQue.push_back(m_startTown);
 
-	float m_fuel = 450;
+	float m_fuelLimit = m_car->getFuel();
 
 	m_startTown->setChecked(true);
-	m_startTown->setCurrentFuel(m_fuel);
+	m_startTown->setCurrentFuel(m_fuelLimit);
 
 	m_townList[t_startId]->setAccumaltedCost(0, 0);
 	m_townList[t_startId]->setChecked(true);
@@ -116,12 +167,10 @@ void Map::generatePath(int t_startId, int t_targetId)
 			if (m_roadList[m_roadIndex]->getActive())
 			{
 				int pathCost = m_townList[m_currentTownId]->getAccumaltedCost();
-
 				std::vector<int> m_prevIds = m_townList[m_currentTownId]->getPrevIds();
 
 				float m_estimatedFuelCost = m_townList[m_currentTownId]->getCurrentFuel() - m_roadList[m_roadIndex]->getWeight();
-				//std::cout << m_estimatedFuelCost << std::endl;
-				if (m_townIndex != m_prevIds.back() && m_estimatedFuelCost >= 0)
+				if ((m_townIndex != m_prevIds.back() || m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel()) && m_estimatedFuelCost >= 0)
 				{
 					//std::cout << m_townList[m_currentTownId]->getCurrentFuel() << " " << m_roadList[m_roadIndex]->getWeight() << std::endl;
 					//std::cout << m_townList[m_townIndex]->getCurrentFuel() << std::endl;
@@ -134,7 +183,6 @@ void Map::generatePath(int t_startId, int t_targetId)
 					///a longer route with more fuel the longer route takes priority
 					if (dist < m_searchedNode || (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel() && m_townList[m_townIndex]->getChecked()))
 					{
-
 						if (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel())
 						{
 							m_townList[m_townIndex]->setChecked(false);
@@ -144,7 +192,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 						m_townList[m_townIndex]->useFuelValue();
 						m_townList[m_townIndex]->setPrevIds(m_prevIds,m_townList[m_currentTownId]->getID());
 						m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_townList[m_currentTownId]->getAccumaltedCost());
-
+						
 					}
 					else
 					{
@@ -154,8 +202,10 @@ void Map::generatePath(int t_startId, int t_targetId)
 					if (m_townList[m_townIndex]->getChecked() == false)
 					{
 						m_townList[m_townIndex]->setChecked(true);
-		//		m_searchQue.push_back(m_townList[m_townIndex]);
-						//std::cout << m_townIndex << std::endl;
+
+
+						//Method used to sort checked roads in order of highest to lowest
+						//Bug found that causes two different paths being created between two points
 						if (searchedTowns.size() == 0)
 						{
 							searchedTowns.push_back(m_townList[m_townIndex]);
@@ -166,7 +216,6 @@ void Map::generatePath(int t_startId, int t_targetId)
 							
 							for (int i = 0; i < m_size; i++)
 							{
-								//std::cout << i << std::endl;
 								if(m_townList[m_townIndex]->getHeuristic() < searchedTowns.back()->getHeuristic())
 								{
 									searchedTowns.push_back(m_townList[m_townIndex]);
@@ -185,7 +234,6 @@ void Map::generatePath(int t_startId, int t_targetId)
 									}
 								}
 							}
-
 						}
 
 						if (m_townIndex == t_targetId)
@@ -196,7 +244,7 @@ void Map::generatePath(int t_startId, int t_targetId)
 				}
 			}
 		}
-		//m_searchQue.erase(m_searchQue.begin());
+
 		m_searchQue.pop_back();
 		for (int i = 0; i < searchedTowns.size(); i++)
 		{
@@ -206,73 +254,99 @@ void Map::generatePath(int t_startId, int t_targetId)
 			}
 		}
 	}
-	int m_currentIndex = t_targetId;
-	m_roughPath.clear();
-	//m_townList[t_targetId]->getPrevId().erase(m_townList[t_targetId]->getPrevId().begin());
-	std::vector<int> m_pathIds = m_townList[t_targetId]->getPrevIds();
 
-	m_pathIds.push_back(t_targetId);
-
-	while (m_pathIds.size() != 1)
+	if (m_townList[t_targetId]->getPrevIds().size() != 0)
 	{
-		if (m_currentIndex == t_targetId && m_townList[t_targetId]->getPrevIds().size() == 0)
-		{
-			std::cout << "Not Enough Fuel";
-		}
-		else
-		{
-			//std::cout << m_currentIndex << std::endl;
-			//std::cout << m_townList[m_currentIndex]->getCurrentFuel() << std::endl;
-			m_roughPath.push_back(m_townList[m_pathIds.back()]);
-			m_townList[m_pathIds.back()]->setColor(sf::Color::Green);
-			m_pathIds.pop_back();
-		}
-	}
+		int m_currentIndex = t_targetId;
+		m_roughPath.clear();
+		//m_townList[t_targetId]->getPrevId().erase(m_townList[t_targetId]->getPrevId().begin());
+		std::vector<int> m_pathIds = m_townList[t_targetId]->getPrevIds();
 
-	m_path.clear();
-	m_path.push_back(m_roughPath.front()->getCenter());
-	int index = 1;
-	int m_currentRoadIndex;
-	while (m_path.back() != m_roughPath.back()->getCenter())
-	{
-		for (int i = 0; i < m_roughPath[index - 1]->getRelatedIds().size(); i++)
+		m_pathIds.push_back(t_targetId);
+
+		while (m_pathIds.size() != 1)
 		{
-			for (int j = 0; j < m_roughPath[index]->getRelatedIds().size(); j++)
+			if (m_currentIndex == t_targetId && m_townList[t_targetId]->getPrevIds().size() == 0)
 			{
-				if (m_roughPath[index - 1]->getRelatedIds()[i] == m_roughPath[index]->getRelatedIds()[j])
-				{
-					m_currentRoadIndex = m_roughPath[index]->getRelatedIds()[j];
-				}
+				std::cout << "Not Enough Fuel";
+			}
+			else
+			{
+				//std::cout << m_currentIndex << std::endl;
+				std::cout << m_townList[m_pathIds.back()]->getCurrentFuel() << std::endl;
+				m_roughPath.push_back(m_townList[m_pathIds.back()]);
+				m_townList[m_pathIds.back()]->setColor(sf::Color::Green);
+				m_pathIds.pop_back();
 			}
 		}
 
-		if (getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][0]->getPosition(), m_roughPath[index - 1]->getPosition()) 
-			< getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition(), 
-				m_roughPath[index - 1]->getPosition()))
+		m_path.clear();
+		m_path.push_back(m_roughPath.front()->getCenter());
+		int index = 1;
+		int m_currentRoadIndex;
+		while (m_path.back() != m_roughPath.back()->getCenter())
 		{
-			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][0]->getPosition());
-			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
-		}
-		else
-		{
-			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
-			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][0]->getPosition());
+			for (int i = 0; i < m_roughPath[index - 1]->getRelatedIds().size(); i++)
+			{
+				for (int j = 0; j < m_roughPath[index]->getRelatedIds().size(); j++)
+				{
+					if (m_roughPath[index - 1]->getRelatedIds()[i] == m_roughPath[index]->getRelatedIds()[j])
+					{
+						m_currentRoadIndex = m_roughPath[index]->getRelatedIds()[j];
+					}
+				}
+			}
+
+			if (getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][0]->getPosition(), m_roughPath[index - 1]->getPosition())
+				< getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition(),
+					m_roughPath[index - 1]->getPosition()))
+			{
+				m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][0]->getPosition());
+				m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
+			}
+			else
+			{
+				m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
+				m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][0]->getPosition());
+			}
+
+			m_path.push_back(m_roughPath[index]->getCenter());
+			index++;
 		}
 
-		m_path.push_back(m_roughPath[index]->getCenter());
-		index++;
 	}
-
-
+	else
+	{
+		std::cout << "Path Failed" << std::endl;
+	}
 	auto m_checkTimeEnd = std::chrono::high_resolution_clock::now();
 
 	std::chrono::duration<double> time = m_checkTimeEnd - m_checkTimeStart;
 
 	std::cout << time.count() << std::endl;
+	m_multiObjectiveTimeText.setString("Time: " + std::to_string(time.count()));
 
-	for (int i = 0; i < 2; i++)
+	float m_accumWidth = m_multiObjectivePathText.getGlobalBounds().width;
+	float m_accumHeight = 0;
+
+	m_nodeText.clear();
+	for (int i = m_roughPath.size() - 1; i >= 0; i--)
 	{
-		m_startEndIds[i] = -10;
+		m_nodeText.push_back(sf::Text());
+		if (i > 0)
+		{
+			m_nodeText[m_roughPath.size() - 1 - i].setString(std::to_string(m_roughPath[i]->getID()) + ", ");
+		}
+		else
+		{
+			m_nodeText[m_roughPath.size() - 1 - i].setString(std::to_string(m_roughPath[i]->getID()));
+		}
+		m_nodeText[m_roughPath.size() - 1 - i].setPosition(sf::Vector2f(m_multiObjectivePathText.getPosition().x + m_accumWidth, m_multiObjectivePathText.getPosition().y));
+		m_nodeText[m_roughPath.size() - 1 - i].setFont(m_font);
+		m_nodeText[m_roughPath.size() - 1 - i].setFillColor(sf::Color::Black);
+		m_nodeText[m_roughPath.size() - 1 - i].setCharacterSize(10);
+
+		m_accumWidth += m_nodeText[m_roughPath.size() - 1 - i].getGlobalBounds().width;
 	}
 }
 
@@ -287,20 +361,11 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 	for (int i = 0; i < m_townList.size(); i++)
 	{
 		m_townList[i]->setHeuristic(m_endTown->getCenter());
-		m_townList[i]->setPrevId(-66);
+		m_townList[i]->clearPrevIds();
 		if (m_townList[i] != m_startTown)
 		{
 			m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000, 0);
 			m_townList[i]->setChecked(false);
-		}
-
-		if (m_townList[i]->getFuelValue() == 0)
-		{
-			m_townList[i]->setColor(sf::Color::Yellow);
-		}
-		else
-		{
-			m_townList[i]->setColor(sf::Color::Cyan);
 		}
 		m_townList[i]->setCurrentFuel(0);
 	}
@@ -309,12 +374,15 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 
 	m_searchQue.push_back(m_startTown);
 
+	float m_fuelLimit = m_car->getFuel();
+
 	m_startTown->setChecked(true);
+	m_startTown->setCurrentFuel(m_fuelLimit);
 
 	m_townList[t_startId]->setAccumaltedCost(0, 0);
 	m_townList[t_startId]->setChecked(true);
-	std::vector<int> t_startList;
-	m_townList[t_startId]->setPrevIds(t_startList, -66);
+
+	m_townList[t_startId]->setPrevId(-66);
 
 	auto m_checkTimeStart = std::chrono::high_resolution_clock::now();
 
@@ -341,24 +409,17 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 			{
 				int pathCost = m_townList[m_currentTownId]->getAccumaltedCost();
 
-				std::vector<int> m_prevIds = m_townList[m_currentTownId]->getPrevIds();
+				float m_estimatedFuelCost = m_townList[m_currentTownId]->getCurrentFuel() - m_roadList[m_roadIndex]->getWeight();
 
-				//std::cout << m_estimatedFuelCost << std::endl;
-				if (m_townIndex != m_prevIds.back())
+				if (m_townIndex != m_townList[m_currentTownId]->getPrevId())
 				{
-					//std::cout << m_townList[m_currentTownId]->getCurrentFuel() << " " << m_roadList[m_roadIndex]->getWeight() << std::endl;
-					//std::cout << m_townList[m_townIndex]->getCurrentFuel() << std::endl;
-
 					int dist = m_roadList[m_roadIndex]->getWeight() + pathCost + m_townList[m_townIndex]->getHeuristic();
 					int m_searchedNode = m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic();
 
-					///The first half of the below situation is to check for the shortest path to the destination while the second half is used
-					///when a route encounters a shorter route with the less fuel ie the shorter route will be created first but if it encounters 
-					///a longer route with more fuel the longer route takes priority
 					if (dist < m_searchedNode)
 					{
-						m_townList[m_townIndex]->useFuelValue();
-						m_townList[m_townIndex]->setPrevIds(m_prevIds, m_townList[m_currentTownId]->getID());
+						m_townList[m_townIndex]->setCurrentFuel(m_estimatedFuelCost + m_townList[m_townIndex]->getFuelValue());
+						m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
 						m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_townList[m_currentTownId]->getAccumaltedCost());
 
 					}
@@ -370,10 +431,7 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 					if (m_townList[m_townIndex]->getChecked() == false)
 					{
 						m_townList[m_townIndex]->setChecked(true);
-						//		m_searchQue.push_back(m_townList[m_townIndex]);
-										//std::cout << m_townIndex << std::endl;
 
-						//The below situation is used for sorting the paths connected to a node based on their length
 						if (searchedTowns.size() == 0)
 						{
 							searchedTowns.push_back(m_townList[m_townIndex]);
@@ -384,7 +442,6 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 
 							for (int i = 0; i < m_size; i++)
 							{
-								//std::cout << i << std::endl;
 								if (m_townList[m_townIndex]->getHeuristic() < searchedTowns.back()->getHeuristic())
 								{
 									searchedTowns.push_back(m_townList[m_townIndex]);
@@ -414,7 +471,7 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 				}
 			}
 		}
-		//m_searchQue.erase(m_searchQue.begin());
+
 		m_searchQue.pop_back();
 		for (int i = 0; i < searchedTowns.size(); i++)
 		{
@@ -427,31 +484,22 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 	int m_currentIndex = t_endId;
 	m_roughPath.clear();
 	//m_townList[t_targetId]->getPrevId().erase(m_townList[t_targetId]->getPrevId().begin());
-	std::vector<int> m_pathIds = m_townList[t_endId]->getPrevIds();
+	int m_pathId = t_endId;
 
-	m_pathIds.push_back(t_endId);
-
-	while (m_pathIds.size() != 1)
+	while (m_pathId > -1)
 	{
-		if (m_currentIndex == t_endId && m_townList[t_endId]->getPrevIds().size() == 0)
-		{
-			std::cout << "Not Enough Fuel";
-		}
-		else
-		{
 			//std::cout << m_currentIndex << std::endl;
 			//std::cout << m_townList[m_currentIndex]->getCurrentFuel() << std::endl;
-			m_roughPath.push_back(m_townList[m_pathIds.back()]);
-			m_townList[m_pathIds.back()]->setColor(sf::Color::Green);
-			m_pathIds.pop_back();
-		}
+			m_roughPath.push_back(m_townList[m_pathId]);
+
+			m_pathId = m_townList[m_pathId]->getPrevId();
 	}
 
-	m_path.clear();
-	m_path.push_back(m_roughPath.front()->getCenter());
+	m_aStarPath.clear();
+	m_aStarPath.push_back(m_roughPath.front()->getCenter());
 	int index = 1;
 	int m_currentRoadIndex;
-	while (m_path.back() != m_roughPath.back()->getCenter())
+	while (m_aStarPath.back() != m_roughPath.back()->getCenter())
 	{
 		for (int i = 0; i < m_roughPath[index - 1]->getRelatedIds().size(); i++)
 		{
@@ -468,16 +516,16 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 			< getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition(),
 				m_roughPath[index - 1]->getPosition()))
 		{
-			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][0]->getPosition());
-			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
+			m_aStarPath.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][0]->getPosition());
+			m_aStarPath.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
 		}
 		else
 		{
-			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
-			m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][0]->getPosition());
+			m_aStarPath.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][m_roadList[m_currentRoadIndex]->getTiles().size() - 1]->getPosition());
+			m_aStarPath.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][0]->getPosition());
 		}
 
-		m_path.push_back(m_roughPath[index]->getCenter());
+		m_aStarPath.push_back(m_roughPath[index]->getCenter());
 		index++;
 	}
 
@@ -487,19 +535,48 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 	std::chrono::duration<double> time = m_checkTimeEnd - m_checkTimeStart;
 
 	std::cout << time.count() << std::endl;
+	m_aStarTimeText.setString("Time: " + std::to_string(time.count()));
 
-	for (int i = 0; i < 2; i++)
+	float m_accumWidth = m_aStarPathText.getGlobalBounds().width;
+	float m_accumHeight = 0;
+
+	m_AStarNodeText.clear();
+	for (int i = m_roughPath.size() - 1; i >= 0; i--)
 	{
-		m_startEndIds[i] = -10;
+		m_AStarNodeText.push_back(sf::Text());
+		if (i > 0)
+		{
+			m_AStarNodeText[m_roughPath.size() - 1 - i].setString(std::to_string(m_roughPath[i]->getID()) + ", ");
+		}
+		else
+		{
+			m_AStarNodeText[m_roughPath.size() - 1 - i].setString(std::to_string(m_roughPath[i]->getID()));
+		}
+		m_AStarNodeText[m_roughPath.size() - 1 - i].setPosition(sf::Vector2f(m_aStarPathText.getPosition().x + m_accumWidth, m_aStarPathText.getPosition().y));
+		m_AStarNodeText[m_roughPath.size() - 1 - i].setFont(m_font);
+		if (m_roughPath[i]->getCurrentFuel() > 0)
+		{
+			m_AStarNodeText[m_roughPath.size() - 1 - i].setFillColor(sf::Color::Green);
+		}
+		else
+		{
+			m_AStarNodeText[m_roughPath.size() - 1 - i].setFillColor(sf::Color::Red);
+		}
+		m_AStarNodeText[m_roughPath.size() - 1 - i].setCharacterSize(10);
+
+		m_accumWidth += m_AStarNodeText[m_roughPath.size() - 1 - i].getGlobalBounds().width;
 	}
 }
 
-void Map::processLeftMouseKey(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
+void Map::processMouseClick(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 {
 	float startDist;
 	float currentStartDist = 0;
 	int endDist;
 	m_startEndIds[1] = -1;
+
+	bool nodeClick = false;
+
 	for (int i = 0; i < m_townList.size(); i++)
 	{
 		startDist = getDistance(m_townList[i]->getCenter(), t_carPos);
@@ -514,12 +591,27 @@ void Map::processLeftMouseKey(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 		if (endDist < 25)
 		{
 			m_startEndIds[1] = i;
+			nodeClick = true;
+		}
+	}
+
+	for (int i = 0; i < m_roadList.size(); i++)
+	{
+		if (nodeClick == false)
+		{
+			m_roadList[i]->processMouseClick(t_mousePos);
 		}
 	}
 
 	if (m_startEndIds[1] != -1)
 	{
 		generatePath(m_startEndIds[0], m_startEndIds[1]);
+		generatePathAStar(m_startEndIds[0], m_startEndIds[1]);
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		m_startEndIds[i] = -10;
 	}
 
 	for (int i = 0; i < m_townList.size(); i++)
@@ -538,6 +630,26 @@ void Map::render(sf::RenderWindow& t_window)
 	for (int i = 0; i < m_townList.size(); i++)
 	{
 		m_townList[i]->render(t_window);
+	}
+
+	t_window.draw(m_multiObjectiveHudBox);
+	t_window.draw(m_multiObjectiveText);
+	t_window.draw(m_multiObjectiveTimeText);
+	t_window.draw(m_multiObjectivePathText);
+
+	for (int i = 0; i < m_nodeText.size(); i++)
+	{
+		t_window.draw(m_nodeText[i]);
+	}
+
+	t_window.draw(m_aStarHudBox);
+	t_window.draw(m_aStarText);
+	t_window.draw(m_aStarTimeText);
+	t_window.draw(m_aStarPathText);
+
+	for (int i = 0; i < m_AStarNodeText.size(); i++)
+	{
+		t_window.draw(m_AStarNodeText[i]);
 	}
 }
 

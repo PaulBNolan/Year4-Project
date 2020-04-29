@@ -3,12 +3,6 @@
 Car::Car(std::vector<sf::Vector2f> &t_path):
 	m_roughPath(t_path)
 {
-	m_position = sf::Vector2f(50, 50);
-
-	m_body.setRadius(2);
-	m_body.setOrigin(sf::Vector2f(5, 5));
-	m_body.setPosition(m_position);
-	m_body.setFillColor(sf::Color::Yellow);
 }
 
 void Car::update()
@@ -48,9 +42,46 @@ void Car::render(sf::RenderWindow& t_window)
 	t_window.draw(m_body);
 }
 
-int Car::getWidth()
+void Car::setType(CarType t_type)
 {
-	return m_widthValue;
+	m_position = sf::Vector2f(50, 50);
+
+	switch (t_type)
+	{
+	case CarType::Small:
+		m_body.setRadius(1);
+		m_body.setOrigin(sf::Vector2f(1, 1));
+		m_body.setPosition(m_position);
+		m_body.setFillColor(sf::Color::Red);
+		m_maximumFuel = 1000;
+		break;
+
+	case CarType::Medium:
+		m_body.setRadius(1.5f);
+		m_body.setOrigin(sf::Vector2f(1.5f, 1.5f));
+		m_body.setPosition(m_position);
+		m_body.setFillColor(sf::Color::White);
+		m_maximumFuel = 1500;
+		break;
+
+	case CarType::Large:
+		m_body.setRadius(2);
+		m_body.setOrigin(sf::Vector2f(2, 2));
+		m_body.setPosition(m_position);
+		m_body.setFillColor(sf::Color::Yellow);
+		m_maximumFuel = 2000;
+		break;
+	}
+}
+
+float Car::getWidth()
+{
+	return m_body.getRadius();
+}
+
+float Car::getFuel()
+{
+	return m_maximumFuel;
 }
 
 float Car::getDistance(sf::Vector2f t_current, sf::Vector2f t_dest)

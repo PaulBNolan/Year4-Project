@@ -9,6 +9,7 @@ class Road
 public:
 	Road(int t_id, int t_width);
 
+	void processMouseClick(sf::Vector2i t_position);
 	void render(sf::RenderWindow& t_window);
 	void setRelatedIds(int t_id);
 	void setPositions(sf::Vector2f t_position);
@@ -18,6 +19,7 @@ public:
 	int getWidth();
 	float getWeight();
 	bool getActive();
+	bool getBlocked();
 
 	std::vector<std::vector<Tiles*>> getTiles();
 private:
@@ -35,6 +37,7 @@ private:
 
 	bool m_checked;
 	bool m_active;
+	bool m_blocked;
 
 	float m_length;
 	float m_width;
