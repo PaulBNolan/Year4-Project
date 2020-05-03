@@ -96,7 +96,6 @@ void Map::setHud()
 
 void Map::update()
 {
-	std::cout << m_roughPath.size() << std::endl;
 	if (m_roughPath.size() != 0 && m_path.size() != 0)
 	{
 		if (m_roughPath.back()->getCenter() == m_path.back())
@@ -536,7 +535,7 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 	while (m_pathId > -1)
 	{
 			//std::cout << m_currentIndex << std::endl;
-			//std::cout << m_townList[m_currentIndex]->getCurrentFuel() << std::endl;
+			std::cout << m_townList[m_pathId]->getCurrentFuel() << std::endl;
 		m_aStarRoughPath.push_back(m_townList[m_pathId]);
 
 			m_pathId = m_townList[m_pathId]->getPrevId();
@@ -601,7 +600,7 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 		}
 		m_AStarNodeText[m_aStarRoughPath.size() - 1 - i].setPosition(sf::Vector2f(m_aStarPathText.getPosition().x + m_accumWidth, m_aStarPathText.getPosition().y));
 		m_AStarNodeText[m_aStarRoughPath.size() - 1 - i].setFont(m_font);
-		if (m_roughPath[i]->getCurrentFuel() > 0)
+		if (m_aStarRoughPath[i]->getCurrentFuel() > 0)
 		{
 			m_AStarNodeText[m_aStarRoughPath.size() - 1 - i].setFillColor(sf::Color::Green);
 		}
@@ -653,17 +652,23 @@ void Map::processMouseClick(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 	if (m_startEndIds[1] != -1)
 	{
 		generatePath(m_startEndIds[0], m_startEndIds[1]);
+
+		for (int i = 0; i < m_townList.size(); i++)
+		{
+			m_townList[i]->resetFuelValue();
+		}
+
 		generatePathAStar(m_startEndIds[0], m_startEndIds[1]);
+
+		for (int i = 0; i < m_townList.size(); i++)
+		{
+			m_townList[i]->resetFuelValue();
+		}
 	}
 
 	for (int i = 0; i < 2; i++)
 	{
 		m_startEndIds[i] = -10;
-	}
-
-	for (int i = 0; i < m_townList.size(); i++)
-	{
-		m_townList[i]->resetFuelValue();
 	}
 }
 
