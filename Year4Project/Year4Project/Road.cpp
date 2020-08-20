@@ -11,7 +11,7 @@ void Road::processMouseClick(sf::Vector2i t_position)
 	sf::Vector2f position = sf::Vector2f(t_position.x, t_position.y);
 	for (int i = 0; i < 5; i++)
 	{
-		bool m_clickFound = false;
+		m_clickFound = false;
 		for (int j = 0; j < rowNo; j++)
 		{
 			float distance = sqrt(pow(m_roadTiles[i][j]->getPosition().x - position.x, 2) +
@@ -167,6 +167,11 @@ bool Road::getActive()
 bool Road::getBlocked()
 {
 	return m_blocked;
+}
+
+bool Road::getClickFound()
+{
+	return m_clickFound;
 }
 
 std::vector<std::vector<Tiles*>> Road::getTiles()

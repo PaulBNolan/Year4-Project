@@ -1,34 +1,148 @@
 ﻿  Map.cpp
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(6,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(10,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(20,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(22,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(117,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(123,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(138,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(171,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(188,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(197,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(198,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(295,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(335,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(337,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(407,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(413,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(439,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(456,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(462,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(463,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(522,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(550,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(552,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(626,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(629,24): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(644,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(656,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(663,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(677,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(682,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(693,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paul\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(703,20): warning C4018: '<': signed/unsigned mismatch
-  Year4Project.vcxproj -> C:\Users\paul\Desktop\Year4-Project\Year4Project\Debug\Year4Project.exe
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(6,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(10,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(20,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(22,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(47,71): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(48,89): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(48,64): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(51,62): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(52,80): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(52,55): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(56,58): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(58,71): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(62,62): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(64,75): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(68,62): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(70,96): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(70,70): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(74,62): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(76,96): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(76,70): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(80,49): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(82,62): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(86,53): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(88,87): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(88,61): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(92,53): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(94,87): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(94,61): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(127,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(164,25): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(185,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(191,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(206,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(239,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(256,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(265,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(266,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(363,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(403,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(405,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(461,77): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(475,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(481,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(507,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(524,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(530,15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(531,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(590,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(618,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(620,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(680,87): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(695,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(698,24): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(713,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(731,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(738,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(752,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(757,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(768,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\HP\Desktop\Year4-Project\Year4Project\Year4Project\Map.cpp(778,20): warning C4018: '<': signed/unsigned mismatch
+libyaml-cppmdd.lib(directives.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(directives.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(exceptions.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exceptions.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(exp.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exp.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(memory.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(memory.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(node_data.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(node_data.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(nodebuilder.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(nodebuilder.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(null.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(null.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(parse.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(parse.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(parser.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(parser.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(regex_yaml.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(regex_yaml.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scanner.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scanner.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scanscalar.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scanscalar.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scantag.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scantag.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scantoken.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scantoken.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(simplekey.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(simplekey.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(singledocparser.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(singledocparser.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(stream.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(stream.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(tag.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(tag.obj)' or at 'C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+  Year4Project.vcxproj -> C:\Users\HP\Desktop\Year4-Project\Year4Project\Debug\Year4Project.exe

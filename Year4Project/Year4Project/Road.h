@@ -20,6 +20,7 @@ public:
 	float getWeight();
 	bool getActive();
 	bool getBlocked();
+	bool getClickFound();
 
 	std::vector<std::vector<Tiles*>> getTiles();
 private:
@@ -38,6 +39,7 @@ private:
 	bool m_checked;
 	bool m_active;
 	bool m_blocked;
+	bool m_clickFound;
 
 	float m_length;
 	float m_width;

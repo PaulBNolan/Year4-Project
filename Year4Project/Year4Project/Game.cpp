@@ -17,7 +17,7 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1350, 700}, "SFML Game" },
+	m_window{ sf::VideoMode{ 1800, 1000}, "SFML Game" },
 	m_exitGame{false} //when true game will exit
 {
 	m_window.setPosition(sf::Vector2i(0, 0));
@@ -26,7 +26,7 @@ Game::Game() :
 
 	setupFontAndText(); // load font 
 	setupSprite(); // load texture
-	m_map = new Map(m_mapData,m_ArialBlackfont, m_car);
+	m_map = new Map(m_mapData,m_ArialBlackfont, m_car,sf::Vector2f(m_window.getSize()));
 	m_car = new Car(m_map->m_path);
 	m_menu = new Menu(m_ArialBlackfont);
 
