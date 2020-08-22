@@ -58,10 +58,24 @@ void Town::setAccumaltedCost(float t_roadWeight, float t_prevCost)
 	m_accumulatedCost = t_prevCost + t_roadWeight;
 }
 
+void Town::pushFrontPrevIds(int t_id)
+{
+	m_prevIds.insert(m_prevIds.begin(),t_id);
+}
+
 void Town::setPrevIds(std::vector<int> t_currentPrev, int t_id)
 {
 	m_prevIds = t_currentPrev;
 	m_prevIds.push_back(t_id);
+}
+
+void Town::popBackPrevIds() {
+	m_prevIds.pop_back();
+}
+
+void Town::popFrontPrevIds()
+{
+	m_prevIds.erase(m_prevIds.begin());
 }
 
 void Town::clearPrevIds()

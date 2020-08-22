@@ -28,6 +28,9 @@ public:
 	float getFuelValue();
 
 	void setPrevIds(std::vector<int> t_currentPrev, int t_id);
+	void pushFrontPrevIds(int t_id);
+	void popBackPrevIds();
+	void popFrontPrevIds();
 	void clearPrevIds();
 	std::vector<int> getPrevIds();
 

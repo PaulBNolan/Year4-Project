@@ -2,6 +2,7 @@
 #define MAP
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <algorithm>
 #include <chrono>
 #include "Town.h"
 #include "Road.h"

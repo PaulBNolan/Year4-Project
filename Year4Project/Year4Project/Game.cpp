@@ -98,10 +98,7 @@ void Game::processMouseClick()
 				
 				break;
 			case State::Game:
-				if (m_map->getPath().size() == 0)
-				{
 					m_map->processMouseClick(m_car->getPosition(), sf::Mouse::getPosition(m_window));
-				}
 				break;
 			}
 		}

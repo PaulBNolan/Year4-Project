@@ -109,30 +109,37 @@ void Map::update()
 
 void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 {
+	//This is used in the event of a change to an existing path.
+	//Is it used to store ids of nodes already passed at the time of the change
+	std::vector<int> m_passedIds;
+
 	Town* m_startTown = NULL;
 	Town* m_endTown = NULL;
 	std::cout << t_roadId << std::endl;
 	if (t_roadId == -1)
 	{
+		m_roughPath.clear();
 		m_startTown = m_townList[t_startId];
 		m_endTown = m_townList[t_targetId];
 	}
 	else
 	{
-		m_endTown = m_roughPath.back();
+		m_endTown = m_roughPath.front();
+		t_targetId = m_endTown->getID();
 
 		if (m_roadList[t_roadId]->getBlocked() == true)
 		{
 			//A single for loop is used due to the two nodes being looked for should be adjacent on the list for there connecting path to affect it by being turned off
-			for (int i = 0; i < m_roughPath.size() - 1; i++)
+			for (int i = m_roughPath.size() - 1; i > 1; i--)
 			{
-				if (( m_roughPath[i]->getID() == m_roadList[t_roadId]->getRelatedId(0) && m_roughPath[i + 1]->getID() == m_roadList[t_roadId]->getRelatedId(1) )
+				if (( m_roughPath[i]->getID() == m_roadList[t_roadId]->getRelatedId(0) && m_roughPath[i - 1]->getID() == m_roadList[t_roadId]->getRelatedId(1) )
 					||
-					(m_roughPath[i]->getID() == m_roadList[t_roadId]->getRelatedId(1) && m_roughPath[i + 1]->getID() == m_roadList[t_roadId]->getRelatedId(0)))
+					(m_roughPath[i]->getID() == m_roadList[t_roadId]->getRelatedId(1) && m_roughPath[i - 1]->getID() == m_roadList[t_roadId]->getRelatedId(0)))
 					{
-						m_removedTowns = std::vector<Town*>(m_roughPath.begin() + i, m_roughPath.end());
-						m_roughPath = std::vector<Town*>(m_roughPath.begin(), m_roughPath.begin() + i);
-						m_startTown = m_roughPath.back();
+						//m_removedTowns = std::vector<Town*>(m_roughPath.begin() + i, m_roughPath.end());
+						//m_roughPath = std::vector<Town*>(m_roughPath.begin(), m_roughPath.begin() + i);
+						m_startTown = m_roughPath[i];
+						t_startId = m_startTown->getID();
 					}
 			}
 		}
@@ -177,6 +184,28 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 				}
 			}
 		}
+
+		if (m_startTown != NULL)
+		{
+			while (m_roughPath.front() != m_startTown)
+			{
+				std::cout << m_roughPath.front()->getID() << std::endl;
+				m_roughPath.erase(m_roughPath.begin());
+			}
+			while (m_roughPath.back()->getPrevIds().size() != 0)
+			{
+				m_passedIds.push_back(m_roughPath.back()->getPrevIds().back());
+				m_roughPath.back()->popBackPrevIds();
+			}
+			for (int i = m_roughPath.size() - 1; i >= 0; i--)
+			{
+				while (m_roughPath[i]->getPrevIds().size() > (m_roughPath.size() - i))
+				{
+					m_roughPath[i]->popFrontPrevIds();
+				}
+				m_roughPath[i]->pushFrontPrevIds(-66);
+			}
+		}
 	}
 
 	//std::cout << "Start " << t_startId << std::endl;
@@ -185,11 +214,36 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 	for (int i = 0; i < m_townList.size(); i++)
 	{
 		m_townList[i]->setHeuristic(m_endTown->getCenter());
-		m_townList[i]->clearPrevIds();
+		if (m_roughPath.size() == 0)
+		{
+			m_townList[i]->clearPrevIds();
+			if (m_townList[i] != m_startTown)
+			{
+				m_townList[i]->setChecked(false);
+			}
+			m_townList[i]->setCurrentFuel(0);
+		}
+		else
+		{
+			bool clear = true;
+			for (int j = 0; j < m_roughPath.size(); j++)
+			{
+				if (m_roughPath[j] == m_townList[i])
+				{
+					clear = false;
+				}
+			}
+			if (clear == true)
+			{
+				m_townList[i]->setChecked(false);
+				m_townList[i]->clearPrevIds();
+				m_townList[i]->setCurrentFuel(0);
+				std::cout << i << "Cleared" << std::endl;
+			}
+		}
 		if (m_townList[i] != m_startTown)
 		{
 			m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000,0);
-			m_townList[i]->setChecked(false);
 		}
 
 		if (m_townList[i]->getFuelValue() == 0)
@@ -200,7 +254,6 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 		{
 			m_townList[i]->setColor(sf::Color::Cyan);
 		}
-		m_townList[i]->setCurrentFuel(0);
 	}
 
 	for (int i = 0; i < m_roadList.size(); i++)
@@ -217,7 +270,17 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 	std::vector<Town*> m_searchQue;
 
-	m_searchQue.push_back(m_startTown);
+	if (m_roughPath.size() == 0)
+	{
+		m_searchQue.push_back(m_startTown);
+	}
+	if (m_roughPath.size() != 0)
+	{
+		for (int i = 0; i < m_roughPath.size(); i++)
+		{
+			m_searchQue.push_back(m_roughPath[i]);
+		}
+	}
 
 	float m_fuelLimit = m_car->getFuel();
 
@@ -227,10 +290,18 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 	m_townList[t_startId]->setAccumaltedCost(0, 0);
 	m_townList[t_startId]->setChecked(true);
 	std::vector<int> t_startList;
-	m_townList[t_startId]->setPrevIds(t_startList ,-66);
 
+	if (t_roadId == -1)
+	{
+		m_townList[t_startId]->setPrevIds(t_startList, -66);
+	}
 	auto m_checkTimeStart = std::chrono::high_resolution_clock::now();
 	
+
+
+
+
+	////Algorithm 
 	while (m_searchQue.size() != 0 && m_searchQue.back()->getID() != t_targetId)
 	{
 		std::vector<int> searchedTownsCosts;
@@ -249,8 +320,8 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 				}
 			}
 
-			//std::cout << "Size: " << m_searchQue.back()->getRelatedIds().size() << std::endl;
-			//std::cout << m_currentTownId <<" Checking Town: " << m_townIndex << std::endl;
+			std::cout << "Size: " << m_searchQue.back()->getRelatedIds().size() << std::endl;
+			std::cout << m_currentTownId <<" Checking Town: " << m_townIndex << std::endl;
 			if (m_roadList[m_roadIndex]->getActive())
 			{
 				int pathCost = m_townList[m_currentTownId]->getAccumaltedCost();
@@ -372,7 +443,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 	if (m_townList[t_targetId]->getPrevIds().size() != 0)
 	{
 		int m_currentIndex = t_targetId;
-		m_roughPath.clear();
+		//m_roughPath.clear();
 		//m_townList[t_targetId]->getPrevId().erase(m_townList[t_targetId]->getPrevId().begin());
 		std::vector<int> m_pathIds = m_townList[t_targetId]->getPrevIds();
 
@@ -386,14 +457,17 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 			}
 			else
 			{
-				//std::cout << m_currentIndex << std::endl;
+				std::cout << m_pathIds.back() << std::endl;
 				//std::cout << m_townList[m_pathIds.back()]->getCurrentFuel() << std::endl;
 				m_roughPath.push_back(m_townList[m_pathIds.back()]);
 				m_townList[m_pathIds.back()]->setColor(sf::Color::Green);
 				m_pathIds.pop_back();
 			}
+			
 		}
 
+
+		//Refine Path
 		m_path.clear();
 		m_path.push_back(m_roughPath.front()->getCenter());
 		int index = 1;
@@ -475,7 +549,6 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 	for (int i = 0; i < m_townList.size(); i++)
 	{
 		m_townList[i]->setHeuristic(m_endTown->getCenter());
-		m_townList[i]->clearPrevIds();
 		if (m_townList[i] != m_startTown)
 		{
 			m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000, 0);
@@ -683,6 +756,8 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 	}
 }
 
+//[[spoiler:While searching for Kawaki in Konohagakure he approaches two ninjaand questions them on where Kawaki is.When one of them attacks him he casually counter attacksand repeats his question to the other.When the other ninja admits to not knowing where Kawaki is Isshiki simply changes the question to who they think might know while thanking them for not wasting his time.]]
+
 void Map::processMouseClick(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 {
 	float startDist;
@@ -710,9 +785,9 @@ void Map::processMouseClick(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 		}
 	}
 
-	for (int i = 0; i < m_roadList.size(); i++)
+	if (nodeClick == false)
 	{
-		if (nodeClick == false)
+		for (int i = 0; i < m_roadList.size(); i++)
 		{
 			m_roadList[i]->processMouseClick(t_mousePos);
 
