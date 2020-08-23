@@ -129,6 +129,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 		if (m_roadList[t_roadId]->getBlocked() == true)
 		{
+			std::cout << "Path Turned off" << std::endl;
 			//A single for loop is used due to the two nodes being looked for should be adjacent on the list for there connecting path to affect it by being turned off
 			for (int i = m_roughPath.size() - 1; i > 1; i--)
 			{
@@ -145,14 +146,84 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 		}
 		else if (m_roadList[t_roadId]->getBlocked() == false)
 		{
+			std::cout << "Path Turned on" << std::endl;
 			//An a* derived algorithm is a directed algorithm so if a new possibility were to open up on a previously explored path theres a possibility it would create a more efficent path then the current
 			if (m_townList[m_roadList[t_roadId]->getRelatedId(0)]->getChecked() == true || m_townList[m_roadList[t_roadId]->getRelatedId(1)]->getChecked() == true)
 			{
-				m_endTown = m_roughPath.back();
 				int currentIndex;
 				if (m_townList[m_roadList[t_roadId]->getRelatedId(0)]->getChecked() == true && m_townList[m_roadList[t_roadId]->getRelatedId(1)]->getChecked() == true)
 				{
 					std::cout << "Both nodes are retraced until the connected path node is found." << std::endl;
+
+					int startPoint1 = m_roadList[t_roadId]->getRelatedId(0);
+					int t_id1 = -1;
+
+					int startPoint2 = m_roadList[t_roadId]->getRelatedId(1);
+					int t_id2 = -1;
+
+
+					for (int j = 0; j < m_roughPath.size(); j++)
+					{
+						if (m_roughPath[j]->getID() == m_townList[startPoint1]->getID())
+						{
+							t_id1 = j;
+							break;
+						}
+					}
+
+					for (int j = 0; j < m_roughPath.size(); j++)
+					{
+						if (m_roughPath[j]->getID() == m_townList[startPoint2]->getID())
+						{
+							t_id2 = j;
+							break;
+						}
+					}
+
+					if (t_id1 == -1)
+					{
+						for (int i = m_townList[startPoint1]->getPrevIds().size() - 1; i >= 0; i--)
+						{
+							if (t_id1 == -1)
+							{
+								for (int j = 0; j < m_roughPath.size(); j++)
+								{
+									if (m_roughPath[j]->getID() == m_townList[startPoint1]->getPrevIds()[i])
+									{
+										t_id1 = j;
+									}
+								}
+							}
+						}
+					}
+					if (t_id2 == -1)
+					{
+
+						for (int i = m_townList[startPoint2]->getPrevIds().size() - 1; i >= 0; i--)
+						{
+							if (t_id2 == -1)
+							{
+								for (int j = 0; j < m_roughPath.size(); j++)
+								{
+									if (m_roughPath[j]->getID() == m_townList[startPoint2]->getPrevIds()[i])
+									{
+										t_id2 = j;
+									}
+								}
+							}
+						}
+					}
+
+					std::cout << "Id1: " << t_id1 << "--------- Id2: " << t_id2 << std::endl;
+
+					if (t_id1 >= t_id2)
+					{
+						m_startTown = m_roughPath[t_id1];
+					}
+					else
+					{
+						m_startTown = m_roughPath[t_id2];
+					}
 				}
 				else
 				{
@@ -182,11 +253,22 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 						m_startTown = m_roughPath.front();
 					}
 				}
+				t_startId = m_startTown->getID();
 			}
 		}
 
 		if (m_startTown != NULL)
 		{
+			//for (int i = m_roughPath.size() - 1; i >= 0; i--)
+			//{
+			//	std::cout << "Id: " << m_roughPath[i]->getID() << " Previous List BEFORE";
+			//	for (int j = 0; j < m_roughPath[i]->getPrevIds().size(); j++)
+			//	{
+			//		std::cout << m_roughPath[i]->getPrevIds()[j] << " ";
+			//	}
+			//	std::cout << " " << std::endl;
+			//}
+
 			while (m_roughPath.front() != m_startTown)
 			{
 				std::cout << m_roughPath.front()->getID() << std::endl;
@@ -204,6 +286,13 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 					m_roughPath[i]->popFrontPrevIds();
 				}
 				m_roughPath[i]->pushFrontPrevIds(-66);
+
+				//std::cout << "Id: " << m_roughPath[i]->getID() << " Previous List AFTER";
+				//for (int j = 0; j < m_roughPath[i]->getPrevIds().size(); j++)
+				//{
+				//	std::cout << m_roughPath[i]->getPrevIds()[j] << " ";
+				//}
+				//std::cout << " " << std::endl;
 			}
 		}
 	}
@@ -238,7 +327,6 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 				m_townList[i]->setChecked(false);
 				m_townList[i]->clearPrevIds();
 				m_townList[i]->setCurrentFuel(0);
-				std::cout << i << "Cleared" << std::endl;
 			}
 		}
 		if (m_townList[i] != m_startTown)
@@ -276,10 +364,11 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 	}
 	if (m_roughPath.size() != 0)
 	{
-		for (int i = 0; i < m_roughPath.size(); i++)
+		for (int i = m_roughPath.size() - 1; i >= 0; i--)
 		{
 			m_searchQue.push_back(m_roughPath[i]);
 		}
+		m_roughPath.clear();
 	}
 
 	float m_fuelLimit = m_car->getFuel();
@@ -307,6 +396,14 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 		std::vector<int> searchedTownsCosts;
 		std::vector<Town*> searchedTowns;
 		int m_currentTownId = m_searchQue.back()->getID();
+
+
+		//Solution to issue caused by prev ids list beforehand. A prev id is set up first then when it comes to check the nodes neighbours the list is updated to prevent confusion
+		if (m_currentTownId != t_startId)
+		{
+			//std::cout << m_townList[m_townList[m_currentTownId]->getPrevId()]->getPrevIds().size() << " " << m_townList[m_currentTownId]->getPrevId() << std::endl;
+			m_townList[m_currentTownId]->setPrevIds(m_townList[m_townList[m_currentTownId]->getPrevId()]->getPrevIds(), m_townList[m_currentTownId]->getPrevId());
+		}
 		for (int i = 0; i < m_searchQue.back()->getRelatedIds().size(); i++)
 		{ 
 			int m_roadIndex = m_townList[m_currentTownId]->getRelatedIds()[i];
@@ -320,8 +417,8 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 				}
 			}
 
-			std::cout << "Size: " << m_searchQue.back()->getRelatedIds().size() << std::endl;
-			std::cout << m_currentTownId <<" Checking Town: " << m_townIndex << std::endl;
+			//std::cout << "Size: " << m_searchQue.back()->getRelatedIds().size() << std::endl;
+			//std::cout << m_currentTownId <<" Checking Town: " << m_townIndex << std::endl;
 			if (m_roadList[m_roadIndex]->getActive())
 			{
 				int pathCost = m_townList[m_currentTownId]->getAccumaltedCost();
@@ -339,6 +436,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 					///The first half of the below situation is to check for the shortest path to the destination while the second half is used
 					///when a route encounters a shorter route with the less fuel ie the shorter route will be created first but if it encounters 
 					///a longer route with more fuel the longer route takes priority
+					//if (dist < m_searchedNode || (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel() && m_townList[m_townIndex]->getChecked()))
 					if (dist < m_searchedNode || (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel() && m_townList[m_townIndex]->getChecked()))
 					{
 						if (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel())
@@ -348,7 +446,8 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 						m_townList[m_townIndex]->setCurrentFuel(m_estimatedFuelCost + m_townList[m_townIndex]->getFuelValue());
 						m_townList[m_townIndex]->useFuelValue();
-						m_townList[m_townIndex]->setPrevIds(m_prevIds,m_townList[m_currentTownId]->getID());
+						m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
+						//m_townList[m_townIndex]->setPrevIds(m_prevIds,m_townList[m_currentTownId]->getID());
 						m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_townList[m_currentTownId]->getAccumaltedCost());
 						
 					}
@@ -364,7 +463,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 						//Method used to sort checked roads in order of highest to lowest
 						//Bug found that causes two different paths being created between two points
-						if (searchedTownsCosts.size() == 0)
+						if (searchedTowns.size() == 0)
 						{
 							searchedTowns.push_back(m_townList[m_townIndex]);
 							searchedTownsCosts.push_back(dist);
@@ -430,12 +529,21 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 			}
 		}
 
+
+		//std::cout << "Current Node" << m_searchQue.back()->getID() << std::endl;
+
 		m_searchQue.pop_back();
+		
 		for (int i = 0; i < searchedTowns.size(); i++)
 		{
+			//std::cout << "Current Node" << searchedTowns[i]->getID() << " Heuristic " << searchedTowns[i]->getHeuristic() << std::endl;
 			if (searchedTowns.size() > 0)
 			{
 				m_searchQue.push_back(searchedTowns[i]);
+				if (m_searchQue.back()->getID() == t_targetId)
+				{
+					m_townList[m_searchQue.back()->getID()]->setPrevIds(m_townList[m_townList[m_searchQue.back()->getID()]->getPrevId()]->getPrevIds(), m_townList[m_searchQue.back()->getID()]->getPrevId());
+				}
 			}
 		}
 	}
