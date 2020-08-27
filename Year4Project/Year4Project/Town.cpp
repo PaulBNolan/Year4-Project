@@ -7,16 +7,6 @@ Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 	m_position = t_position;
 	m_town.setPosition(m_position);
 	m_town.setRadius(radius);
-	if (t_value == 0)
-	{
-		m_town.setFillColor(sf::Color::Yellow);
-		m_town.setOutlineColor(sf::Color::Blue);
-	}
-	else
-	{
-		m_town.setFillColor(sf::Color::Cyan);
-		m_town.setOutlineColor(sf::Color::Magenta);
-	}
 
 	m_town.setOutlineThickness(2.0f);
 
@@ -33,7 +23,7 @@ Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 	m_IdText.setFont(m_font);
 
 
-	m_originalFuelValue = t_value;
+	setOriginalFuel(t_value);
 	m_fuelValue = t_value;
 }
 
@@ -96,6 +86,21 @@ void Town::setChecked(bool t_checked)
 void Town::setCurrentFuel(float t_fuel)
 {
 	m_currentFuel = t_fuel;
+}
+void Town::setOriginalFuel(float t_fuel)
+{
+	m_originalFuelValue = t_fuel;
+
+	if (m_originalFuelValue == 0)
+	{
+		m_town.setFillColor(sf::Color::Yellow);
+		m_town.setOutlineColor(sf::Color::Blue);
+	}
+	else
+	{
+		m_town.setFillColor(sf::Color::Cyan);
+		m_town.setOutlineColor(sf::Color::Magenta);
+	}
 }
 
 void Town::useFuelValue()
@@ -165,4 +170,13 @@ float Town::getCurrentFuel()
 float Town::getFuelValue()
 {
 	return m_fuelValue;
+}
+
+void Town::setNumberOfPasses(int t_value)
+{
+	m_numberOfStationsPassed = t_value;
+}
+int Town::getNumberOfPasses()
+{
+	return m_numberOfStationsPassed;
 }

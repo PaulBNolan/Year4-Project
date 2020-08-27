@@ -13,7 +13,7 @@ void Car::update()
 		if (m_velocity == sf::Vector2f(0, 0))
 		{
 			m_angle = atan2(m_position.y - m_roughPath.back().y, m_position.x - m_roughPath.back().x);
-			m_velocity = sf::Vector2f(cos(m_angle), sin(m_angle));
+			m_velocity = sf::Vector2f(cos(m_angle) / 2, sin(m_angle) / 2);
 		}
 
 		if (getDistance(m_position, m_roughPath.back()) < 4)

@@ -51,86 +51,90 @@ Towns:
     Position X: 500
     Position Y: 350
     Value: 0
-  - Name: "Team 14"
+  - Name: "Town 14"
     Position X: 150
     Position Y: 500
     Value: 0
-  - Name: "Team 15"
+  - Name: "Town 15"
     Position X: 500
     Position Y: 50
     Value: 0
-  - Name: "Team 16"
+  - Name: "Town 16"
     Position X: 500
     Position Y: 500
     Value: 0
-  - Name: "Team 17"
+  - Name: "Town 17"
     Position X: 500
     Position Y: 200
     Value: 0
-  - Name: "Team 18"
+  - Name: "Town 18"
     Position X: 700
     Position Y: 200
     Value: 0
-  - Name: "Team 19"
+  - Name: "Town 19"
     Position X: 700
     Position Y: 50
     Value: 0
-  - Name: "Team 20"
+  - Name: "Town 20"
     Position X: 700
     Position Y: 350
     Value: 0
-  - Name: "Team 21"
+  - Name: "Town 21"
     Position X: 900
     Position Y: 350
     Value: 1000
-  - Name: "Team 22"
+  - Name: "Town 22"
     Position X: 900
     Position Y: 500
     Value: 0
-  - Name: "Team 23"
+  - Name: "Town 23"
     Position X: 1100
     Position Y: 350
     Value: 0
-  - Name: "Team 24"
+  - Name: "Town 24"
     Position X: 1100
     Position Y: 200
     Value: 0
-  - Name: "Team 25"
+  - Name: "Town 25"
     Position X: 700
     Position Y: 600
-    Value: 1000
-  - Name: "Team 26"
+    Value: 0
+  - Name: "Town 26"
     Position X: 900 
     Position Y: 50
     Value: 0
-  - Name: "Team 27"
+  - Name: "Town 27"
     Position X: 1300
     Position Y: 650
     Value: 0
-  - Name: "Team 28"
+  - Name: "Town 28"
     Position X: 1100
     Position Y: 500
     Value: 0
-  - Name: "Team 29"
+  - Name: "Town 29"
     Position X: 1300
     Position Y: 50
     Value: 0
-  - Name: "Team 30"
+  - Name: "Town 30"
     Position X: 1600
     Position Y: 50
     Value: 0
-  - Name: "Team 31"
+  - Name: "Town 31"
     Position X: 1600
     Position Y: 350
     Value: 0
-  - Name: "Team 32"
+  - Name: "Town 32"
     Position X: 1300
     Position Y: 350
     Value: 0
-  - Name: "Team 33"
+  - Name: "Town 33"
     Position X: 1300
     Position Y: 900
     Value: 0
+  - Name: "Town 34"
+    Position X: 500
+    Position Y: 550
+    Value: 1000
 Roads:
   - Id1: 0
     Id2: 1
@@ -258,3 +262,21 @@ Roads:
   - Id1: 20
     Id2: 22
     Width: 1
+  - Id1: 26
+    Id2: 31
+    Width: 1
+  - Id1: 26
+    Id2: 31
+    Width: 2
+  - Id1: 28
+    Id2: 30
+    Width: 2
+  - Id1: 30
+    Id2: 31
+    Width: 2
+  - Id1: 30
+    Id2: 29
+    Width: 2
+  - Id1: 33
+    Id2: 15
+    Width: 2

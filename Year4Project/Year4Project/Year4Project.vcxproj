@@ -28,6 +28,7 @@
     <ClCompile Include="Road.cpp" />
     <ClCompile Include="Tiles.cpp" />
     <ClCompile Include="Town.cpp" />
+    <ClCompile Include="TownControlPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Car.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="Road.h" />
     <ClInclude Include="Tiles.h" />
     <ClInclude Include="Town.h" />
+    <ClInclude Include="TownControlPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ASSETS\IMAGES\SFML-LOGO.png">

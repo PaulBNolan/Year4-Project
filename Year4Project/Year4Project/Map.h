@@ -8,6 +8,30 @@
 #include "Road.h"
 #include "LoadMap.h"
 #include "Car.h"
+
+
+/// <summary>
+/// Struct created to record necessary information on each node when it is searched
+/// </summary>
+struct NodeData
+{
+	int m_id;
+	int m_previousId;
+	float m_accumaltedCost;
+	float m_currentFuel;
+	int m_numberOfPasses;
+
+	NodeData(int t_id, int t_previousId, float t_accumlatedCost, float t_currentFuel, int t_numverOfPasses) : 
+		m_id(t_id),  
+		m_previousId(t_previousId), 
+		m_accumaltedCost(t_accumlatedCost), 
+		m_currentFuel(t_currentFuel),
+		m_numberOfPasses(t_numverOfPasses)
+	{
+
+	}
+};
+
 class Map
 {
 public:
@@ -67,6 +91,8 @@ private:
 	std::string m_aStarPathString;
 
 	Car* &m_car;
+
+	std::vector<sf::CircleShape> m_points;
 };
 
 #endif // !1

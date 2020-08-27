@@ -21,6 +21,7 @@ public:
 	float getAccumaltedCost();
 
 	void setCurrentFuel(float t_fuel);
+	void setOriginalFuel(float t_fuel);
 	float getCurrentFuel();
 
 	void useFuelValue();
@@ -43,6 +44,9 @@ public:
 	bool getChecked();
 
 	std::vector<int> getRelatedIds();
+
+	void setNumberOfPasses(int t_value);
+	int getNumberOfPasses();
 private:
 	std::vector<int> m_connectedRoadIds;
 	int m_townId;
@@ -61,6 +65,9 @@ private:
 
 	std::vector<int> m_prevIds;
 	int m_prevId;
+
+	//Used for when nodes with lower values are compared agaisnt nodes with higher fuel values and more stations visited
+	int m_numberOfStationsPassed;
 
 	bool m_checked;
 	sf::Text m_IdText;
