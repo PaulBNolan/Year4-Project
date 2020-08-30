@@ -106,6 +106,7 @@ void Map::update()
 		{
 			//m_multiObjectiveFuelText.setString("Fuel: " + std::to_string(int(m_roughPath.back()->getCurrentFuel())));
 			std::cout << m_roughPath.back()->getID() << " Popped" << std::endl;
+			m_passedIds.push_back(m_roughPath.back()->getID());
 			m_roughPath.pop_back();
 			m_nodeQue.erase(m_nodeQue.begin());
 		}
@@ -114,17 +115,17 @@ void Map::update()
 
 void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 {
-	//This is used in the event of a change to an existing path.
-	//Is it used to store ids of nodes already passed at the time of the change
-	std::vector<int> m_passedIds;
 
 	Town* m_startTown = NULL;
 	Town* m_endTown = NULL;
 
-	bool isCorrection = false;
+	bool m_newPath = false;
+	bool m_oldPath = false;
 
 	if (t_roadId == -1)
 	{
+		m_passedIds.clear();
+		m_newPath = true;
 		m_currentPathMinimumCost = std::numeric_limits<int>::max() - 10000;
 		m_roughPath.clear();
 		m_startTown = m_townList[t_startId];
@@ -132,7 +133,6 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 	}
 	else
 	{
-		isCorrection = true;
 		//Both of these are set to the end and start of the current rough path with the id of the closest being found to determine the best location on the path to start off with
 		m_endTown = m_roughPath.front();
 		t_targetId = m_endTown->getID();
@@ -173,6 +173,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 						//m_removedTowns = std::vector<Town*>(m_roughPath.begin() + i, m_roughPath.end());
 						//m_roughPath = std::vector<Town*>(m_roughPath.begin(), m_roughPath.begin() + i);
 					m_breakOffPoint = i - 1;
+					m_oldPath = true;
 					}
 			}
 		}
@@ -211,6 +212,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 				if (m_currentPathMinimumCost > m_estimatedMinimumCost)
 				{
+					m_oldPath = true;
 					for (int i = 0; i < m_nodeQue.size(); i++)
 					{
 						if (m_nodeQue[i].m_id == m_roadList[t_roadId]->getRelatedId(0) || m_nodeQue[i].m_id == m_roadList[t_roadId]->getRelatedId(1))
@@ -265,7 +267,6 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 			}
 			while (m_roughPath.back()->getPrevIds().size() != 0)
 			{
-				m_passedIds.push_back(m_roughPath.back()->getPrevIds().back());
 				m_roughPath.back()->popBackPrevIds();
 				//std::cout << m_passedIds.back() << std::endl;
 			}
@@ -296,511 +297,534 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 	std::cout << "Start " << t_startId << std::endl;
 	std::cout << "End " << t_targetId << std::endl;
 
-	for (int i = 0; i < m_townList.size(); i++)
+	if (m_newPath == true || m_oldPath == true)
 	{
-		m_townList[i]->setHeuristic(m_endTown->getCenter());
+
+		for (int i = 0; i < m_townList.size(); i++)
+		{
+			m_townList[i]->setHeuristic(m_endTown->getCenter());
+			if (m_roughPath.size() == 0)
+			{
+				m_townList[i]->clearPrevIds();
+				if (m_townList[i] != m_startTown)
+				{
+					m_townList[i]->setChecked(false);
+					m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000, 0);
+				}
+				m_townList[i]->setCurrentFuel(0);
+				m_townList[i]->setNumberOfPasses(0);
+
+			}
+			else
+			{
+				bool clear = true;
+				int queId;
+				for (int j = 0; j < m_roughPath.size(); j++)
+				{
+					if (m_roughPath[j] == m_townList[i])
+					{
+						clear = false;
+						queId = m_nodeQue.size() - j - 1;
+					}
+				}
+				if (clear == true)
+				{
+					std::cout << "Cleared: " << i << std::endl;
+					m_townList[i]->setChecked(false);
+					m_townList[i]->clearPrevIds();
+					m_townList[i]->setCurrentFuel(0);
+					m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000, 0);
+					m_townList[i]->setNumberOfPasses(0);
+				}
+				else
+				{
+					m_townList[i]->setChecked(true);
+					m_townList[i]->setCurrentFuel(m_nodeQue[queId].m_currentFuel);
+				}
+			}
+
+			if (m_townList[i]->getFuelValue() == 0)
+			{
+				m_townList[i]->setColor(sf::Color::Yellow);
+			}
+			else
+			{
+				m_townList[i]->setColor(sf::Color::Cyan);
+			}
+		}
+
+		for (int i = 0; i < m_roadList.size(); i++)
+		{
+			if (m_roadList[i]->getBlocked() == false && m_roadList[i]->getWidth() >= m_car->getWidth())
+			{
+				m_roadList[i]->setActive(true);
+			}
+			else
+			{
+				m_roadList[i]->setActive(false);
+			}
+		}
+
+
+
+		float m_fuelLimit = m_car->getFuel();
+
+		m_startTown->setChecked(true);
+		m_startTown->setCurrentFuel(m_fuelLimit);
+
+		m_townList[t_startId]->setAccumaltedCost(0, 0);
+		m_townList[t_startId]->setChecked(true);
+
 		if (m_roughPath.size() == 0)
 		{
-			m_townList[i]->clearPrevIds();
-			if (m_townList[i] != m_startTown)
-			{
-				m_townList[i]->setChecked(false);
-				m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000, 0);
-			}
-			m_townList[i]->setCurrentFuel(0);
-			m_townList[i]->setNumberOfPasses(0);
 
+			m_startTown->setCurrentFuel(m_fuelLimit);
+			//m_searchQue.push_back(m_startTown);
+			m_nodeQue.clear();
+			m_nodeQue.push_back(NodeData(t_startId, -66, m_townList[t_startId]->getAccumaltedCost(), m_townList[t_startId]->getCurrentFuel(), 0));
 		}
-		else
+		if (m_roughPath.size() != 0)
 		{
-			bool clear = true;
-			int queId;
-			for (int j = 0; j < m_roughPath.size(); j++)
+			m_roughPath.clear();
+		}
+		std::vector<int> t_startList;
+
+		if (t_roadId == -1)
+		{
+			m_townList[t_startId]->setPrevIds(t_startList, -66);
+		}
+		auto m_checkTimeStart = std::chrono::high_resolution_clock::now();
+
+		//Variable used to prevent fuel points from being readded to the same path. This is used to prevent loops
+		bool m_stationPassed;
+
+		//Used to check if the current node can overwrite the next one
+		bool m_moreEfficent;
+
+
+		//std::vector<NodeData> m_nodeQue;
+		//m_nodeQue.push_back(NodeData(t_startId,-66, m_townList[t_startId]->getAccumaltedCost(), m_townList[t_startId]->getCurrentFuel(),0));
+		////Algorithm 
+		while (m_nodeQue.size() != 0)
+		{
+			//std::vector<int> searchedTownsCosts;
+			std::vector<Town*> searchedTowns;
+
+			int m_currentTownId = m_nodeQue.back().m_id;
+
+			if (m_currentTownId == 23)
 			{
-				if (m_roughPath[j] == m_townList[i])
+				//	std::cout << "Current Town " << m_currentTownId << "Fuel "<<m_nodeQue.back().m_currentFuel << " Accumlated Cost " << m_nodeQue.back().m_accumaltedCost << " Minimum to target: " << m_townList[m_currentTownId]->getHeuristic() << " Current Path Cost " << m_currentPathMinimumCost << std::endl;
+			}
+
+			//Any path that currently has a higher path cost then current when to the object will be removed. Additionally since the heuristic is set up by finding the distance between the nodes and the object
+			//any node with a heuristic higher then the current minimum cost will be skipped over
+			if (m_nodeQue.back().m_accumaltedCost + m_townList[m_nodeQue.back().m_id]->getHeuristic() <= m_currentPathMinimumCost)
+			{
+				//Solution to issue caused by prev ids list beforehand. A prev id is set up first then when it comes to check the nodes neighbours the list is updated to prevent confusion
+				if (m_currentTownId != t_startId && m_currentTownId != t_targetId)
 				{
-					clear = false;
-					queId = m_nodeQue.size() - j - 1;
+					//std::cout << m_townList[m_townList[m_currentTownId]->getPrevId()]->getPrevIds().size() << " " << m_townList[m_currentTownId]->getPrevId() << std::endl;
+					//m_townList[m_currentTownId]->setPrevIds(m_townList[m_prevIdQue.back()]->getPrevIds(), m_prevIdQue.back());
+					m_townList[m_currentTownId]->setPrevIds(m_townList[m_nodeQue.back().m_previousId]->getPrevIds(), m_nodeQue.back().m_previousId);
+					//m_townList[m_currentTownId]->setAccumaltedCost(0,m_accumalatedCostQue.back());
+					//m_townList[m_currentTownId]->setCurrentFuel(m_currentFuelQue.back());
+					//m_townList[m_currentTownId]->setNumberOfPasses(m_numberOfPassesQue.back());
 				}
-			}
-			if (clear == true)
-			{
-				std::cout << "Cleared: " << i << std::endl;
-				m_townList[i]->setChecked(false);
-				m_townList[i]->clearPrevIds();
-				m_townList[i]->setCurrentFuel(0);
-				m_townList[i]->setAccumaltedCost(std::numeric_limits<int>::max() - 10000, 0);
-				m_townList[i]->setNumberOfPasses(0);
-			}
-			else
-			{
-				m_townList[i]->setChecked(true);
-				m_townList[i]->setCurrentFuel(m_nodeQue[queId].m_currentFuel);
-			}
-		}
-
-		if (m_townList[i]->getFuelValue() == 0)
-		{
-			m_townList[i]->setColor(sf::Color::Yellow);
-		}
-		else
-		{
-			m_townList[i]->setColor(sf::Color::Cyan);
-		}
-	}
-
-	for (int i = 0; i < m_roadList.size(); i++)
-	{
-		if (m_roadList[i]->getBlocked() == false && m_roadList[i]->getWidth() >= m_car->getWidth())
-		{
-			m_roadList[i]->setActive(true);
-		}
-		else
-		{
-			m_roadList[i]->setActive(false);
-		}
-	}
-
-
-
-	float m_fuelLimit = m_car->getFuel();
-
-	m_startTown->setChecked(true);
-	m_startTown->setCurrentFuel(m_fuelLimit);
-
-	m_townList[t_startId]->setAccumaltedCost(0, 0);
-	m_townList[t_startId]->setChecked(true);
-
-	if (m_roughPath.size() == 0)
-	{
-
-		m_startTown->setCurrentFuel(m_fuelLimit);
-		//m_searchQue.push_back(m_startTown);
-		m_nodeQue.clear();
-		m_nodeQue.push_back(NodeData(t_startId, -66, m_townList[t_startId]->getAccumaltedCost(), m_townList[t_startId]->getCurrentFuel(), 0));
-	}
-	if (m_roughPath.size() != 0)
-	{
-		m_roughPath.clear();
-	}
-	std::vector<int> t_startList;
-
-	if (t_roadId == -1)
-	{
-		m_townList[t_startId]->setPrevIds(t_startList, -66);
-	}
-	auto m_checkTimeStart = std::chrono::high_resolution_clock::now();
-	
-	//Variable used to prevent fuel points from being readded to the same path. This is used to prevent loops
-	bool m_stationPassed;
-
-	//Used to check if the current node can overwrite the next one
-	bool m_moreEfficent;
-
-
-	//std::vector<NodeData> m_nodeQue;
-	//m_nodeQue.push_back(NodeData(t_startId,-66, m_townList[t_startId]->getAccumaltedCost(), m_townList[t_startId]->getCurrentFuel(),0));
-	////Algorithm 
-	while (m_nodeQue.size() != 0)
-	{
-		//std::vector<int> searchedTownsCosts;
-		std::vector<Town*> searchedTowns;
-		
-		int m_currentTownId = m_nodeQue.back().m_id;
-
-		if (m_currentTownId == 23)
-		{
-//	std::cout << "Current Town " << m_currentTownId << "Fuel "<<m_nodeQue.back().m_currentFuel << " Accumlated Cost " << m_nodeQue.back().m_accumaltedCost << " Minimum to target: " << m_townList[m_currentTownId]->getHeuristic() << " Current Path Cost " << m_currentPathMinimumCost << std::endl;
-		}
-
-		//Any path that currently has a higher path cost then current when to the object will be removed. Additionally since the heuristic is set up by finding the distance between the nodes and the object
-		//any node with a heuristic higher then the current minimum cost will be skipped over
-		if (m_nodeQue.back().m_accumaltedCost + m_townList[m_nodeQue.back().m_id]->getHeuristic() <= m_currentPathMinimumCost)
-		{
-			//Solution to issue caused by prev ids list beforehand. A prev id is set up first then when it comes to check the nodes neighbours the list is updated to prevent confusion
-			if (m_currentTownId != t_startId && m_currentTownId != t_targetId)
-			{
-				//std::cout << m_townList[m_townList[m_currentTownId]->getPrevId()]->getPrevIds().size() << " " << m_townList[m_currentTownId]->getPrevId() << std::endl;
-				//m_townList[m_currentTownId]->setPrevIds(m_townList[m_prevIdQue.back()]->getPrevIds(), m_prevIdQue.back());
-				m_townList[m_currentTownId]->setPrevIds(m_townList[m_nodeQue.back().m_previousId]->getPrevIds(), m_nodeQue.back().m_previousId);
-				//m_townList[m_currentTownId]->setAccumaltedCost(0,m_accumalatedCostQue.back());
-				//m_townList[m_currentTownId]->setCurrentFuel(m_currentFuelQue.back());
-				//m_townList[m_currentTownId]->setNumberOfPasses(m_numberOfPassesQue.back());
-			}
-			//for (int i = 0; i < m_searchQue.back()->getRelatedIds().size(); i++)
-			for (int i = 0; i < m_townList[m_nodeQue.back().m_id]->getRelatedIds().size(); i++)
-			{
-				int m_roadIndex = m_townList[m_currentTownId]->getRelatedIds()[i];
-				int m_townIndex;
-
-
-
-				for (int z = 0; z < 2; z++)
+				//for (int i = 0; i < m_searchQue.back()->getRelatedIds().size(); i++)
+				for (int i = 0; i < m_townList[m_nodeQue.back().m_id]->getRelatedIds().size(); i++)
 				{
-					if (m_currentTownId != m_roadList[m_roadIndex]->getRelatedId(z))
+					int m_roadIndex = m_townList[m_currentTownId]->getRelatedIds()[i];
+					int m_townIndex;
+
+
+
+					for (int z = 0; z < 2; z++)
 					{
-						m_townIndex = m_roadList[m_roadIndex]->getRelatedId(z);
+						if (m_currentTownId != m_roadList[m_roadIndex]->getRelatedId(z))
+						{
+							m_townIndex = m_roadList[m_roadIndex]->getRelatedId(z);
+						}
 					}
-				}
-				//This if situation is for preventing the checking of unnconnected towns and paths which can already be determined to be unviable
-				if (m_roadList[m_roadIndex]->getActive() && (m_roadList[m_roadIndex]->getWeight() + m_nodeQue.back().m_accumaltedCost + m_townList[m_townIndex]->getHeuristic() <= m_currentPathMinimumCost))
-				{
-					int pathCost = m_nodeQue.back().m_accumaltedCost;
-					std::vector<int> m_prevIds = m_townList[m_currentTownId]->getPrevIds();
-
-					float m_estimatedFuelCost = m_nodeQue.back().m_currentFuel - m_roadList[m_roadIndex]->getWeight();
-
-					m_moreEfficent = false;
-
-					if (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel())
+					//This if situation is for preventing the checking of unnconnected towns and paths which can already be determined to be unviable
+					if (m_roadList[m_roadIndex]->getActive() && (m_roadList[m_roadIndex]->getWeight() + m_nodeQue.back().m_accumaltedCost + m_townList[m_townIndex]->getHeuristic() <= m_currentPathMinimumCost))
 					{
-						m_moreEfficent = true;
-					}
-					else if (m_estimatedFuelCost >= m_townList[m_townIndex]->getCurrentFuel() - (1000 * (m_townList[m_townIndex]->getNumberOfPasses() - m_nodeQue.back().m_numberOfPasses))
-						&&
-						m_townList[m_townIndex]->getNumberOfPasses() > m_nodeQue.back().m_numberOfPasses)
-					{
-						m_moreEfficent = true;
-					}
+						int pathCost = m_nodeQue.back().m_accumaltedCost;
+						std::vector<int> m_prevIds = m_townList[m_currentTownId]->getPrevIds();
 
-					if (m_currentTownId == 23)
-					{
-		//		std::cout << m_estimatedFuelCost << std::endl;
-					}
+						float m_estimatedFuelCost = m_nodeQue.back().m_currentFuel - m_roadList[m_roadIndex]->getWeight();
 
-					if ((m_townIndex != m_prevIds.back() || m_moreEfficent == true) && m_estimatedFuelCost >= 0)
-					{
-						//std::cout << m_townList[m_currentTownId]->getCurrentFuel() << " " << m_roadList[m_roadIndex]->getWeight() << std::endl;
-						//std::cout << m_townList[m_townIndex]->getCurrentFuel() << std::endl;
-						m_stationPassed = false;
-						if (m_nodeQue.back().m_numberOfPasses > 0)
-						{ 
-							int stationsChecked = 0;
-							for (int i = 1; i < m_townList[m_currentTownId]->getPrevIds().size(); i++)
-							{
-								//Checks for any occurence of a fuel point being already present on the current path
-								if (m_townList[m_currentTownId]->getPrevIds()[i] == m_townIndex && m_townList[m_townList[m_currentTownId]->getPrevIds()[i]]->getFuelValue() > 0)
-								{
-									m_stationPassed = true;
-									break;
-								}
-								else if (m_townList[m_townList[m_currentTownId]->getPrevIds()[i]]->getFuelValue() > 0)
-								{
-									stationsChecked++;
-									//Every station has been checked and the next station node isnt among them so the loop is broken early
-									if (stationsChecked == m_nodeQue.back().m_numberOfPasses)
-									{
-										break;
-									}
-								}
-							}
+						m_moreEfficent = false;
+
+						if (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel())
+						{
+							m_moreEfficent = true;
+						}
+						else if (m_estimatedFuelCost >= m_townList[m_townIndex]->getCurrentFuel() - (1000 * (m_townList[m_townIndex]->getNumberOfPasses() - m_nodeQue.back().m_numberOfPasses))
+							&&
+							m_townList[m_townIndex]->getNumberOfPasses() > m_nodeQue.back().m_numberOfPasses)
+						{
+							m_moreEfficent = true;
 						}
 
-						int dist = m_roadList[m_roadIndex]->getWeight() + pathCost + m_townList[m_townIndex]->getHeuristic();
-						int m_searchedNode = m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic();
-
-						///The first half of the below situation is to check for the shortest path to the destination while the second half is used
-						///when a route encounters a shorter route with the less fuel ie the shorter route will be created first but if it encounters 
-						///a longer route with more fuel the longer route takes priority with the exception of the target node. The higher fuel value is to ensure a path can reach the target
-						/// so instances were the target node is checked but has taken more time are ignored
-						//if (dist < m_searchedNode || (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel() && m_townList[m_townIndex]->getChecked()))
 						if (m_currentTownId == 23)
 						{
-//					std::cout << "Dist " << dist << " Searched Node " << m_searchedNode<< std::endl;
+							//		std::cout << m_estimatedFuelCost << std::endl;
 						}
 
-						if (dist < m_searchedNode || (m_moreEfficent == true && m_stationPassed == false && m_townList[m_townIndex]->getChecked() && m_townIndex != t_targetId))
+						if ((m_townIndex != m_prevIds.back() || m_moreEfficent == true) && m_estimatedFuelCost >= 0)
 						{
-							if (m_moreEfficent == true)
+							//std::cout << m_townList[m_currentTownId]->getCurrentFuel() << " " << m_roadList[m_roadIndex]->getWeight() << std::endl;
+							//std::cout << m_townList[m_townIndex]->getCurrentFuel() << std::endl;
+							m_stationPassed = false;
+							if (m_nodeQue.back().m_numberOfPasses > 0)
 							{
-								m_townList[m_townIndex]->setChecked(false);
-							}
-
-							if (m_townList[m_townIndex]->getFuelValue() > 0)
-							{
-								m_townList[m_townIndex]->setNumberOfPasses(m_nodeQue.back().m_numberOfPasses + 1);
-							}
-							else
-							{
-								m_townList[m_townIndex]->setNumberOfPasses(m_nodeQue.back().m_numberOfPasses);
-							}
-
-							m_townList[m_townIndex]->setCurrentFuel(m_estimatedFuelCost + m_townList[m_townIndex]->getFuelValue());
-
-							m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_nodeQue.back().m_accumaltedCost);
-
-							if (m_townIndex == t_targetId)
-							{
-		//				std::cout << m_currentPathMinimumCost << " " << m_townList[m_townIndex]->getAccumaltedCost() << std::endl;
-								m_townList[m_townIndex]->setPrevIds(m_townList[m_currentTownId]->getPrevIds(), m_townList[m_currentTownId]->getID());
-								m_currentPathMinimumCost = m_townList[m_townIndex]->getAccumaltedCost();
-							}
-							else
-							{
-								m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
-							}
-
-						}
-						//else
-						//{
-						//	std::cout << m_currentTownId << " to " << m_townIndex << " Failed Dist " << dist << " " << m_searchedNode <<std::endl;
-						//}
-
-						if (m_townList[m_townIndex]->getChecked() == false)
-						{
-							m_townList[m_townIndex]->setChecked(true);
-
-
-							if (searchedTowns.size() == 0)
-							{
-								searchedTowns.push_back(m_townList[m_townIndex]);
-							}
-							else
-							{
-								/*int m_size = searchedTowns.size();
-
-								for (int i = 0; i < m_size; i++)
+								int stationsChecked = 0;
+								for (int i = 1; i < m_townList[m_currentTownId]->getPrevIds().size(); i++)
 								{
-									if(dist < searchedTownsCosts.back())
+									//Checks for any occurence of a fuel point being already present on the current path
+									if (m_townList[m_currentTownId]->getPrevIds()[i] == m_townIndex && m_townList[m_townList[m_currentTownId]->getPrevIds()[i]]->getFuelValue() > 0)
 									{
-										searchedTowns.push_back(m_townList[m_townIndex]);
-										searchedTownsCosts.push_back(dist);
+										m_stationPassed = true;
+										break;
 									}
-									else if (dist > searchedTownsCosts.front())
+									else if (m_townList[m_townList[m_currentTownId]->getPrevIds()[i]]->getFuelValue() > 0)
 									{
-										searchedTowns.insert(searchedTowns.begin(),m_townList[m_townIndex]);
-										searchedTownsCosts.insert(searchedTownsCosts.begin(),dist);
-									}
-									else if(i > 0)
-									{
-										if (dist > searchedTownsCosts[i]
-											&&
-											dist < searchedTownsCosts[i - 1])
+										stationsChecked++;
+										//Every station has been checked and the next station node isnt among them so the loop is broken early
+										if (stationsChecked == m_nodeQue.back().m_numberOfPasses)
 										{
-											searchedTowns.insert(searchedTowns.begin() + i, m_townList[m_townIndex]);
-											searchedTownsCosts.insert(searchedTownsCosts.begin() + i ,dist);
-										}
-									}
-								}*/
-								int m_size = searchedTowns.size();
-
-
-								//for (int i = 0; i < m_size; i++)
-								//{
-								//	if (m_townList[m_townIndex]->getHeuristic() < searchedTowns.back()->getHeuristic())
-								//	{
-								//		searchedTowns.push_back(m_townList[m_townIndex]);
-								//	}
-								//	else if (m_townList[m_townIndex]->getHeuristic() > searchedTowns.front()->getHeuristic())
-								//	{
-								//		searchedTowns.insert(searchedTowns.begin(), m_townList[m_townIndex]);
-								//	}
-								//	else if (i > 0)
-								//	{
-								//		if (m_townList[m_townIndex]->getHeuristic() > searchedTowns[i]->getHeuristic()
-								//			&&
-								//			m_townList[m_townIndex]->getHeuristic() < searchedTowns[i - 1]->getHeuristic())
-								//		{
-								//			searchedTowns.insert(searchedTowns.begin() + i, m_townList[m_townIndex]);
-								//		}
-								//	}
-								//}
-								for (int i = 0; i < m_size; i++)
-								{
-									if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() < searchedTowns.back()->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
-									{
-										searchedTowns.push_back(m_townList[m_townIndex]);
-									}
-									else if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() > searchedTowns.front()->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
-									{
-										searchedTowns.insert(searchedTowns.begin(), m_townList[m_townIndex]);
-									}
-									else if (i > 0)
-									{
-										if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() > searchedTowns[i]->getAccumaltedCost() + searchedTowns.back()->getHeuristic()
-											&&
-											m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() < searchedTowns[i - 1]->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
-										{
-											searchedTowns.insert(searchedTowns.begin() + i, m_townList[m_townIndex]);
+											break;
 										}
 									}
 								}
-
 							}
 
-							if (m_townIndex == t_targetId)
+							int dist = m_roadList[m_roadIndex]->getWeight() + pathCost + m_townList[m_townIndex]->getHeuristic();
+							int m_searchedNode = m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic();
+
+							///The first half of the below situation is to check for the shortest path to the destination while the second half is used
+							///when a route encounters a shorter route with the less fuel ie the shorter route will be created first but if it encounters 
+							///a longer route with more fuel the longer route takes priority with the exception of the target node. The higher fuel value is to ensure a path can reach the target
+							/// so instances were the target node is checked but has taken more time are ignored
+							//if (dist < m_searchedNode || (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel() && m_townList[m_townIndex]->getChecked()))
+							if (m_currentTownId == 23)
 							{
-								break;
+								//					std::cout << "Dist " << dist << " Searched Node " << m_searchedNode<< std::endl;
+							}
+
+							if (dist < m_searchedNode || (m_moreEfficent == true && m_stationPassed == false && m_townList[m_townIndex]->getChecked() && m_townIndex != t_targetId))
+							{
+								if (m_moreEfficent == true)
+								{
+									m_townList[m_townIndex]->setChecked(false);
+								}
+
+								if (m_townList[m_townIndex]->getFuelValue() > 0)
+								{
+									m_townList[m_townIndex]->setNumberOfPasses(m_nodeQue.back().m_numberOfPasses + 1);
+								}
+								else
+								{
+									m_townList[m_townIndex]->setNumberOfPasses(m_nodeQue.back().m_numberOfPasses);
+								}
+
+								m_townList[m_townIndex]->setCurrentFuel(m_estimatedFuelCost + m_townList[m_townIndex]->getFuelValue());
+
+								m_townList[m_townIndex]->setAccumaltedCost(m_roadList[m_roadIndex]->getWeight(), m_nodeQue.back().m_accumaltedCost);
+
+								if (m_townIndex == t_targetId)
+								{
+									//				std::cout << m_currentPathMinimumCost << " " << m_townList[m_townIndex]->getAccumaltedCost() << std::endl;
+									m_townList[m_townIndex]->setPrevIds(m_townList[m_currentTownId]->getPrevIds(), m_townList[m_currentTownId]->getID());
+									m_currentPathMinimumCost = m_townList[m_townIndex]->getAccumaltedCost();
+								}
+								else
+								{
+									m_townList[m_townIndex]->setPrevId(m_townList[m_currentTownId]->getID());
+								}
+
+							}
+							//else
+							//{
+							//	std::cout << m_currentTownId << " to " << m_townIndex << " Failed Dist " << dist << " " << m_searchedNode <<std::endl;
+							//}
+
+							if (m_townList[m_townIndex]->getChecked() == false)
+							{
+								m_townList[m_townIndex]->setChecked(true);
+
+
+								if (searchedTowns.size() == 0)
+								{
+									searchedTowns.push_back(m_townList[m_townIndex]);
+								}
+								else
+								{
+									/*int m_size = searchedTowns.size();
+
+									for (int i = 0; i < m_size; i++)
+									{
+										if(dist < searchedTownsCosts.back())
+										{
+											searchedTowns.push_back(m_townList[m_townIndex]);
+											searchedTownsCosts.push_back(dist);
+										}
+										else if (dist > searchedTownsCosts.front())
+										{
+											searchedTowns.insert(searchedTowns.begin(),m_townList[m_townIndex]);
+											searchedTownsCosts.insert(searchedTownsCosts.begin(),dist);
+										}
+										else if(i > 0)
+										{
+											if (dist > searchedTownsCosts[i]
+												&&
+												dist < searchedTownsCosts[i - 1])
+											{
+												searchedTowns.insert(searchedTowns.begin() + i, m_townList[m_townIndex]);
+												searchedTownsCosts.insert(searchedTownsCosts.begin() + i ,dist);
+											}
+										}
+									}*/
+									int m_size = searchedTowns.size();
+
+
+									//for (int i = 0; i < m_size; i++)
+									//{
+									//	if (m_townList[m_townIndex]->getHeuristic() < searchedTowns.back()->getHeuristic())
+									//	{
+									//		searchedTowns.push_back(m_townList[m_townIndex]);
+									//	}
+									//	else if (m_townList[m_townIndex]->getHeuristic() > searchedTowns.front()->getHeuristic())
+									//	{
+									//		searchedTowns.insert(searchedTowns.begin(), m_townList[m_townIndex]);
+									//	}
+									//	else if (i > 0)
+									//	{
+									//		if (m_townList[m_townIndex]->getHeuristic() > searchedTowns[i]->getHeuristic()
+									//			&&
+									//			m_townList[m_townIndex]->getHeuristic() < searchedTowns[i - 1]->getHeuristic())
+									//		{
+									//			searchedTowns.insert(searchedTowns.begin() + i, m_townList[m_townIndex]);
+									//		}
+									//	}
+									//}
+									for (int i = 0; i < m_size; i++)
+									{
+										if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() < searchedTowns.back()->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
+										{
+											searchedTowns.push_back(m_townList[m_townIndex]);
+										}
+										else if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() > searchedTowns.front()->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
+										{
+											searchedTowns.insert(searchedTowns.begin(), m_townList[m_townIndex]);
+										}
+										else if (i > 0)
+										{
+											if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() > searchedTowns[i]->getAccumaltedCost() + searchedTowns.back()->getHeuristic()
+												&&
+												m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() < searchedTowns[i - 1]->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
+											{
+												searchedTowns.insert(searchedTowns.begin() + i, m_townList[m_townIndex]);
+											}
+										}
+									}
+
+								}
+
+								if (m_townIndex == t_targetId)
+								{
+									break;
+								}
 							}
 						}
 					}
 				}
+
+
+				//std::cout << "Current Node" << m_searchQue.back()->getID() << std::endl;
 			}
+			m_nodeQue.pop_back();
 
-
-			//std::cout << "Current Node" << m_searchQue.back()->getID() << std::endl;
-		}
-		m_nodeQue.pop_back();
-		
-		if (searchedTowns.size() > 0)
-		{
-			for (int i = 0; i < searchedTowns.size(); i++)
+			if (searchedTowns.size() > 0)
 			{
-				//std::cout << "Searched Node" << searchedTowns[i]->getID() << " Heuristic " << searchedTowns[i]->getHeuristic() << std::endl;
-				if (searchedTowns.size() > 0)
+				for (int i = 0; i < searchedTowns.size(); i++)
 				{
-					m_nodeQue.push_back(NodeData(searchedTowns[i]->getID(), searchedTowns[i]->getPrevId(), searchedTowns[i]->getAccumaltedCost(), searchedTowns[i]->getCurrentFuel(), searchedTowns[i]->getNumberOfPasses()));
-					//m_searchQue.insert(m_searchQue.begin(), searchedTowns[i]);
-					//if (m_searchQue.back()->getID() == t_targetId)
-					//{
-					//	m_townList[m_searchQue.back()->getID()]->setPrevIds(m_townList[m_townList[m_searchQue.back()->getID()]->getPrevId()]->getPrevIds(), m_townList[m_searchQue.back()->getID()]->getPrevId());
-					//}
-				}
-			}
-		}
-	}
-
-	auto m_checkTimeEnd = std::chrono::high_resolution_clock::now();
-
-	std::chrono::duration<double> time = m_checkTimeEnd - m_checkTimeStart;
-
-	
-
-	if (m_townList[t_targetId]->getPrevIds().size() != 0)
-	{
-		int m_currentIndex = t_targetId;
-		//m_townList[t_targetId]->getPrevId().erase(m_townList[t_targetId]->getPrevId().begin());
-		std::vector<int> m_pathIds = m_townList[t_targetId]->getPrevIds();
-
-		m_pathIds.push_back(t_targetId);
-
-		while (m_pathIds.size() != 1)
-		{
-			if (m_currentIndex == t_targetId && m_townList[t_targetId]->getPrevIds().size() == 0)
-			{
-				//std::cout << "Not Enough Fuel";
-			}
-			else
-			{
-				m_roughPath.push_back(m_townList[m_pathIds.back()]);
-				m_townList[m_pathIds.back()]->setColor(sf::Color::Green);
-				m_pathIds.pop_back();
-			}
-			
-		}
-
-
-		//Refine Path and store data in the event of a dynamic event
-		m_path.clear();
-		m_path.push_back(m_roughPath.front()->getCenter());
-		int index = 1;
-		int m_currentRoadIndex;
-
-		m_currentAccumlatedCost =  m_roughPath[0]->getAccumaltedCost();
-		m_currentFuel =  m_roughPath[0]->getCurrentFuel();
-		m_fuelValue = m_roughPath[0]->getFuelValue();
-		m_previousId = m_roughPath[1]->getID();
-
-		m_nodeQue.insert(m_nodeQue.begin(), NodeData(m_roughPath[0]->getID(), m_previousId, m_roughPath[0]->getAccumaltedCost(), m_roughPath[0]->getCurrentFuel(), m_roughPath[0]->getNumberOfPasses()));
-
-		while (m_path.back() != m_roughPath.back()->getCenter())
-		{
-			for (int i = 0; i < m_roughPath[index - 1]->getRelatedIds().size(); i++)
-			{
-				for (int j = 0; j < m_roughPath[index]->getRelatedIds().size(); j++)
-				{
-					if (m_roughPath[index - 1]->getRelatedIds()[i] == m_roughPath[index]->getRelatedIds()[j])
+					//std::cout << "Searched Node" << searchedTowns[i]->getID() << " Heuristic " << searchedTowns[i]->getHeuristic() << std::endl;
+					if (searchedTowns.size() > 0)
 					{
-						m_currentRoadIndex = m_roughPath[index]->getRelatedIds()[j];
+						m_nodeQue.push_back(NodeData(searchedTowns[i]->getID(), searchedTowns[i]->getPrevId(), searchedTowns[i]->getAccumaltedCost(), searchedTowns[i]->getCurrentFuel(), searchedTowns[i]->getNumberOfPasses()));
+						//m_searchQue.insert(m_searchQue.begin(), searchedTowns[i]);
+						//if (m_searchQue.back()->getID() == t_targetId)
+						//{
+						//	m_townList[m_searchQue.back()->getID()]->setPrevIds(m_townList[m_townList[m_searchQue.back()->getID()]->getPrevId()]->getPrevIds(), m_townList[m_searchQue.back()->getID()]->getPrevId());
+						//}
 					}
 				}
 			}
-
-			if (getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][0]->getPosition(), m_roughPath[index - 1]->getPosition())
-				< getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][m_roadList[m_currentRoadIndex]->getTiles()[0].size() - 1]->getPosition(),
-					m_roughPath[index - 1]->getPosition()))
-			{
-				m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][0]->getPosition());
-				m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][m_roadList[m_currentRoadIndex]->getTiles()[1].size() - 1]->getPosition());
-			}
-			else
-			{
-				m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][m_roadList[m_currentRoadIndex]->getTiles()[3].size() - 1]->getPosition());
-				m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][0]->getPosition());
-			}
-
-			m_path.push_back(m_roughPath[index]->getCenter());
-
-
-			m_currentAccumlatedCost -= m_roadList[m_currentRoadIndex]->getWeight();
-			m_currentFuel += m_roadList[m_currentRoadIndex]->getWeight() - m_fuelValue;
-			m_fuelValue = m_roughPath[index]->getFuelValue();
-
-			if (index + 1 < m_roughPath.size())
-			{
-				m_previousId = m_roughPath[index + 1]->getID();
-			}
-			else
-			{
-				m_previousId = -66;
-			}
-
-			m_roughPath[index]->setAccumaltedCost(m_currentAccumlatedCost,0);
-			m_roughPath[index]->setCurrentFuel(m_currentFuel);
-
-			m_nodeQue.insert(m_nodeQue.begin(), NodeData(m_roughPath[index]->getID(), m_previousId, m_roughPath[index]->getAccumaltedCost(), m_roughPath[index]->getCurrentFuel(), m_roughPath[index]->getNumberOfPasses()));
-
-			index++;
 		}
 
-		m_nodeQue.front().m_accumaltedCost = 0;
-		m_points.clear();
+		auto m_checkTimeEnd = std::chrono::high_resolution_clock::now();
 
-		sf::CircleShape t_circle;
-		for (int i = 0; i < m_path.size(); i++)
+		std::chrono::duration<double> time = m_checkTimeEnd - m_checkTimeStart;
+
+
+
+		if (m_townList[t_targetId]->getPrevIds().size() != 0)
 		{
-			t_circle.setPosition(m_path[i]);
-			t_circle.setRadius(1);
-			t_circle.setFillColor(sf::Color::White);
+			int m_currentIndex = t_targetId;
+			//m_townList[t_targetId]->getPrevId().erase(m_townList[t_targetId]->getPrevId().begin());
+			std::vector<int> m_pathIds = m_townList[t_targetId]->getPrevIds();
 
-			m_points.push_back(t_circle);
+			m_pathIds.push_back(t_targetId);
+
+			while (m_pathIds.size() != 1)
+			{
+				if (m_currentIndex == t_targetId && m_townList[t_targetId]->getPrevIds().size() == 0)
+				{
+					//std::cout << "Not Enough Fuel";
+				}
+				else
+				{
+					m_roughPath.push_back(m_townList[m_pathIds.back()]);
+					m_townList[m_pathIds.back()]->setColor(sf::Color::Green);
+					m_pathIds.pop_back();
+				}
+
+			}
+
+
+			//Refine Path and store data in the event of a dynamic event
+			m_path.clear();
+			m_path.push_back(m_roughPath.front()->getCenter());
+			int index = 1;
+			int m_currentRoadIndex;
+
+			m_currentAccumlatedCost = m_roughPath[0]->getAccumaltedCost();
+			m_currentFuel = m_roughPath[0]->getCurrentFuel();
+			m_fuelValue = m_roughPath[0]->getFuelValue();
+			m_previousId = m_roughPath[1]->getID();
+
+			m_nodeQue.insert(m_nodeQue.begin(), NodeData(m_roughPath[0]->getID(), m_previousId, m_roughPath[0]->getAccumaltedCost(), m_roughPath[0]->getCurrentFuel(), m_roughPath[0]->getNumberOfPasses()));
+
+			while (m_path.back() != m_roughPath.back()->getCenter())
+			{
+				for (int i = 0; i < m_roughPath[index - 1]->getRelatedIds().size(); i++)
+				{
+					for (int j = 0; j < m_roughPath[index]->getRelatedIds().size(); j++)
+					{
+						if (m_roughPath[index - 1]->getRelatedIds()[i] == m_roughPath[index]->getRelatedIds()[j])
+						{
+							m_currentRoadIndex = m_roughPath[index]->getRelatedIds()[j];
+						}
+					}
+				}
+
+				if (getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][0]->getPosition(), m_roughPath[index - 1]->getPosition())
+					< getDistance(m_roadList[m_currentRoadIndex]->getTiles()[0][m_roadList[m_currentRoadIndex]->getTiles()[0].size() - 1]->getPosition(),
+						m_roughPath[index - 1]->getPosition()))
+				{
+					m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][0]->getPosition());
+					m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[1][m_roadList[m_currentRoadIndex]->getTiles()[1].size() - 1]->getPosition());
+				}
+				else
+				{
+					m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][m_roadList[m_currentRoadIndex]->getTiles()[3].size() - 1]->getPosition());
+					m_path.push_back(m_roadList[m_currentRoadIndex]->getTiles()[3][0]->getPosition());
+				}
+
+				m_path.push_back(m_roughPath[index]->getCenter());
+
+
+				m_currentAccumlatedCost -= m_roadList[m_currentRoadIndex]->getWeight();
+				m_currentFuel += m_roadList[m_currentRoadIndex]->getWeight() - m_fuelValue;
+				m_fuelValue = m_roughPath[index]->getFuelValue();
+
+				if (index + 1 < m_roughPath.size())
+				{
+					m_previousId = m_roughPath[index + 1]->getID();
+				}
+				else
+				{
+					m_previousId = -66;
+				}
+
+				m_roughPath[index]->setAccumaltedCost(m_currentAccumlatedCost, 0);
+				m_roughPath[index]->setCurrentFuel(m_currentFuel);
+
+				m_nodeQue.insert(m_nodeQue.begin(), NodeData(m_roughPath[index]->getID(), m_previousId, m_roughPath[index]->getAccumaltedCost(), m_roughPath[index]->getCurrentFuel(), m_roughPath[index]->getNumberOfPasses()));
+
+				index++;
+			}
+
+			m_nodeQue.front().m_accumaltedCost = 0;
+			m_points.clear();
+
+			sf::CircleShape t_circle;
+			for (int i = 0; i < m_path.size(); i++)
+			{
+				t_circle.setPosition(m_path[i]);
+				t_circle.setRadius(1);
+				t_circle.setFillColor(sf::Color::White);
+
+				m_points.push_back(t_circle);
+			}
+
+		}
+		else
+		{
+			//std::cout << "Path Failed" << std::endl;
+		}
+		m_checkTimeEnd = std::chrono::high_resolution_clock::now();
+
+		std::chrono::duration<double> time2 = m_checkTimeEnd - m_checkTimeStart;
+
+		std::cout << time.count() << std::endl;
+		std::cout << time2.count() << std::endl;
+		m_multiObjectiveTimeText.setString("Time: " + std::to_string(time.count()));
+
+		float m_accumWidth = m_multiObjectivePathText.getGlobalBounds().width;
+		float m_accumHeight = 0;
+
+		m_nodeText.clear();
+
+		for (int i = 0; i < m_passedIds.size(); i++)
+		{
+			m_nodeText.push_back(sf::Text());
+
+			m_nodeText[i].setString(std::to_string(m_passedIds[i]) + ", ");
+
+			m_nodeText[i].setPosition(sf::Vector2f(m_multiObjectivePathText.getPosition().x + m_accumWidth, m_multiObjectivePathText.getPosition().y));
+			m_nodeText[i].setFont(m_font);
+			m_nodeText[i].setFillColor(sf::Color::Black);
+			m_nodeText[ i].setCharacterSize(m_mapDimensions.y * 0.015);
+
+			m_accumWidth += m_nodeText[i].getGlobalBounds().width;
 		}
 
+		for (int i = m_roughPath.size() - 1; i >= 0; i--)
+		{
+			m_nodeText.push_back(sf::Text());
+			if (i > 0)
+			{
+				m_nodeText[m_passedIds.size() + m_roughPath.size() - 1 - i].setString(std::to_string(m_roughPath[i]->getID()) + ", ");
+			}
+			else
+			{
+				m_nodeText[m_passedIds.size() + m_roughPath.size() - 1 - i].setString(std::to_string(m_roughPath[i]->getID()));
+			}
+			m_nodeText[m_passedIds.size() + m_roughPath.size() - 1 - i].setPosition(sf::Vector2f(m_multiObjectivePathText.getPosition().x + m_accumWidth, m_multiObjectivePathText.getPosition().y));
+			m_nodeText[m_passedIds.size() + m_roughPath.size() - 1 - i].setFont(m_font);
+			m_nodeText[m_passedIds.size() + m_roughPath.size() - 1 - i].setFillColor(sf::Color::Black);
+			m_nodeText[m_passedIds.size() + m_roughPath.size() - 1 - i].setCharacterSize(m_mapDimensions.y * 0.015);
+
+			m_accumWidth += m_nodeText[m_passedIds.size() + m_roughPath.size() - 1 - i].getGlobalBounds().width;
+		}
 	}
 	else
 	{
-		//std::cout << "Path Failed" << std::endl;
-	}
-	m_checkTimeEnd = std::chrono::high_resolution_clock::now();
-
-	std::chrono::duration<double> time2 = m_checkTimeEnd - m_checkTimeStart;
-
-	std::cout << time.count() << std::endl;
-	std::cout << time2.count() << std::endl;
-	m_multiObjectiveTimeText.setString("Time: " + std::to_string(time.count()));
-
-	float m_accumWidth = m_multiObjectivePathText.getGlobalBounds().width;
-	float m_accumHeight = 0;
-
-	m_nodeText.clear();
-	for (int i = m_roughPath.size() - 1; i >= 0; i--)
-	{
-		m_nodeText.push_back(sf::Text());
-		if (i > 0)
-		{
-			m_nodeText[m_roughPath.size() - 1 - i].setString(std::to_string(m_roughPath[i]->getID()) + ", ");
-		}
-		else
-		{
-			m_nodeText[m_roughPath.size() - 1 - i].setString(std::to_string(m_roughPath[i]->getID()));
-		}
-		m_nodeText[m_roughPath.size() - 1 - i].setPosition(sf::Vector2f(m_multiObjectivePathText.getPosition().x + m_accumWidth, m_multiObjectivePathText.getPosition().y));
-		m_nodeText[m_roughPath.size() - 1 - i].setFont(m_font);
-		m_nodeText[m_roughPath.size() - 1 - i].setFillColor(sf::Color::Black);
-		m_nodeText[m_roughPath.size() - 1 - i].setCharacterSize(m_mapDimensions.y * 0.015);
-
-		m_accumWidth += m_nodeText[m_roughPath.size() - 1 - i].getGlobalBounds().width;
-	}
+		std::cout << "Algorithm not needed" << std::endl;
+     }
 }
 
 void Map::generatePathAStar(int t_startId, int t_endId)
@@ -1019,7 +1043,10 @@ void Map::processMouseClick(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 
 			if (m_roadList[i]->getClickFound())
 			{
-				generatePath(NULL, NULL, i);
+				if (m_roughPath.size() > 0)
+				{
+					generatePath(NULL, NULL, i);
+				}
 				break;
 			}
 		}

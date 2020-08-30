@@ -55,6 +55,8 @@ public:
 
 	std::vector<NodeData> m_nodeQue;
 	std::vector<Town*> m_roughPath;
+	//Used for storing the ids of passed nodes
+	std::vector<int> m_passedIds;
 	std::vector<sf::Vector2f> m_path;
 	std::vector<Town*> m_removedTowns;
 

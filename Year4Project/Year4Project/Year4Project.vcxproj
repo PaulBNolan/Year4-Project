@@ -26,6 +26,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Road.cpp" />
+    <ClCompile Include="RoadControlPanel.cpp" />
     <ClCompile Include="Tiles.cpp" />
     <ClCompile Include="Town.cpp" />
     <ClCompile Include="TownControlPanel.cpp" />
@@ -37,6 +38,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Road.h" />
+    <ClInclude Include="RoadControlPanel.h" />
     <ClInclude Include="Tiles.h" />
     <ClInclude Include="Town.h" />
     <ClInclude Include="TownControlPanel.h" />

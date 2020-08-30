@@ -14,6 +14,8 @@ public:
 	void setRelatedIds(int t_id);
 	void setPositions(sf::Vector2f t_position);
 	void setActive(bool t_state);
+	void setWidth(int t_value);
+
 	int getRelatedId(int t_i);
 	int getId();
 	int getWidth();

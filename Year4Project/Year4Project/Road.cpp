@@ -139,6 +139,11 @@ void Road::setPositions(sf::Vector2f t_position)
 	}
 }
 
+void Road::setWidth(int t_value)
+{
+	m_widthValue += t_value;
+}
+
 int Road::getRelatedId(int t_i)
 {
 	return m_connectedTownIds[t_i];
