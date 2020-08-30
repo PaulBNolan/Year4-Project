@@ -50,9 +50,14 @@ public:
 	{
 		return m_path;
 	}
+
+	int m_currentPathMinimumCost;
+
+	std::vector<NodeData> m_nodeQue;
 	std::vector<Town*> m_roughPath;
 	std::vector<sf::Vector2f> m_path;
 	std::vector<Town*> m_removedTowns;
+
 
 	std::vector<Town*> m_aStarRoughPath;
 
@@ -93,6 +98,12 @@ private:
 	Car* &m_car;
 
 	std::vector<sf::CircleShape> m_points;
+
+
+	float m_currentAccumlatedCost;
+	float m_currentFuel;
+	float m_fuelValue;
+	int m_previousId;
 };
 
 #endif // !1

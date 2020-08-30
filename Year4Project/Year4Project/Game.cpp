@@ -140,8 +140,8 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	else
 	{
-		m_car->update();
 		m_map->update();
+		m_car->update();
 	}
 
 }
