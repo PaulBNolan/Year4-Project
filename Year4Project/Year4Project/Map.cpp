@@ -419,6 +419,12 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 			//Any path that currently has a higher path cost then current when to the object will be removed. Additionally since the heuristic is set up by finding the distance between the nodes and the object
 			//any node with a heuristic higher then the current minimum cost will be skipped over
+
+			if (m_currentTownId == 27)
+			{
+				std::cout << m_nodeQue.back().m_accumaltedCost << " " << m_townList[m_nodeQue.back().m_id]->getHeuristic() << " " << m_currentPathMinimumCost << std::endl;
+			}
+
 			if (m_nodeQue.back().m_accumaltedCost + m_townList[m_nodeQue.back().m_id]->getHeuristic() <= m_currentPathMinimumCost)
 			{
 				//Solution to issue caused by prev ids list beforehand. A prev id is set up first then when it comes to check the nodes neighbours the list is updated to prevent confusion
@@ -430,6 +436,10 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 					//m_townList[m_currentTownId]->setAccumaltedCost(0,m_accumalatedCostQue.back());
 					//m_townList[m_currentTownId]->setCurrentFuel(m_currentFuelQue.back());
 					//m_townList[m_currentTownId]->setNumberOfPasses(m_numberOfPassesQue.back());
+				}
+				if (t_startId == 22)
+				{
+					std::cout <<  m_currentTownId << std::endl;
 				}
 				//for (int i = 0; i < m_searchQue.back()->getRelatedIds().size(); i++)
 				for (int i = 0; i < m_townList[m_nodeQue.back().m_id]->getRelatedIds().size(); i++)
@@ -447,6 +457,8 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 						}
 					}
 					//This if situation is for preventing the checking of unnconnected towns and paths which can already be determined to be unviable
+
+
 					if (m_roadList[m_roadIndex]->getActive() && (m_roadList[m_roadIndex]->getWeight() + m_nodeQue.back().m_accumaltedCost + m_townList[m_townIndex]->getHeuristic() <= m_currentPathMinimumCost))
 					{
 						int pathCost = m_nodeQue.back().m_accumaltedCost;
@@ -467,10 +479,6 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 							m_moreEfficent = true;
 						}
 
-						if (m_currentTownId == 23)
-						{
-							//		std::cout << m_estimatedFuelCost << std::endl;
-						}
 
 						if ((m_townIndex != m_prevIds.back() || m_moreEfficent == true) && m_estimatedFuelCost >= 0)
 						{
@@ -508,10 +516,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 							///a longer route with more fuel the longer route takes priority with the exception of the target node. The higher fuel value is to ensure a path can reach the target
 							/// so instances were the target node is checked but has taken more time are ignored
 							//if (dist < m_searchedNode || (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel() && m_townList[m_townIndex]->getChecked()))
-							if (m_currentTownId == 23)
-							{
-								//					std::cout << "Dist " << dist << " Searched Node " << m_searchedNode<< std::endl;
-							}
+							
 
 							if (dist < m_searchedNode || (m_moreEfficent == true && m_stationPassed == false && m_townList[m_townIndex]->getChecked() && m_townIndex != t_targetId))
 							{
@@ -535,7 +540,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 								if (m_townIndex == t_targetId)
 								{
-									//				std::cout << m_currentPathMinimumCost << " " << m_townList[m_townIndex]->getAccumaltedCost() << std::endl;
+													std::cout << m_currentPathMinimumCost << " " << m_townList[m_townIndex]->getAccumaltedCost() << std::endl;
 									m_townList[m_townIndex]->setPrevIds(m_townList[m_currentTownId]->getPrevIds(), m_townList[m_currentTownId]->getID());
 									m_currentPathMinimumCost = m_townList[m_townIndex]->getAccumaltedCost();
 								}
@@ -611,19 +616,19 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 									//}
 									for (int i = 0; i < m_size; i++)
 									{
-										if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() < searchedTowns.back()->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
+										if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() <= searchedTowns.back()->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
 										{
 											searchedTowns.push_back(m_townList[m_townIndex]);
 										}
-										else if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() > searchedTowns.front()->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
+										else if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() >= searchedTowns.front()->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
 										{
 											searchedTowns.insert(searchedTowns.begin(), m_townList[m_townIndex]);
 										}
 										else if (i > 0)
 										{
-											if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() > searchedTowns[i]->getAccumaltedCost() + searchedTowns.back()->getHeuristic()
+											if (m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() >= searchedTowns[i]->getAccumaltedCost() + searchedTowns.back()->getHeuristic()
 												&&
-												m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() < searchedTowns[i - 1]->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
+												m_townList[m_townIndex]->getAccumaltedCost() + m_townList[m_townIndex]->getHeuristic() <= searchedTowns[i - 1]->getAccumaltedCost() + searchedTowns.back()->getHeuristic())
 											{
 												searchedTowns.insert(searchedTowns.begin() + i, m_townList[m_townIndex]);
 											}
