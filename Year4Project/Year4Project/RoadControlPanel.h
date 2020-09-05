@@ -2,7 +2,7 @@
 #include "Map.h"
 
 /// <summary>
-/// The purpose of this class is to increase the speed of testing by allowing the user to affect the attributes of the maps towns
+/// The purpose of this class is to increase the speed of testing by allowing the user to affect the attributes of the maps roads such as their width
 /// </summary>
 class RoadControlPanel
 {

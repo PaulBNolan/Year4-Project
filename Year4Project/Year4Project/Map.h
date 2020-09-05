@@ -54,6 +54,7 @@ public:
 	int m_currentPathMinimumCost;
 
 	std::vector<NodeData> m_nodeQue;
+	std::vector<NodeData> m_removedQue;
 	std::vector<Town*> m_roughPath;
 	//Used for storing the ids of passed nodes
 	std::vector<int> m_passedIds;

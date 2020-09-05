@@ -1,9 +1,14 @@
+
+
 #ifndef ROAD
 #define ROAD
 #include "Town.h"
 #include "Tiles.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+/// <summary>
+/// This class is used to represent the arcs of the map.
+/// </summary>
 class Road
 {
 public:

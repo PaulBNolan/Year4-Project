@@ -2,7 +2,7 @@
 #include "Map.h"
 
 /// <summary>
-/// The purpose of this class is to increase the speed of testing by allowing the user to affect the attributes of the maps towns
+/// The planned purpose of this class was to allow the user to alter the fuel values of the nodes in order to allow for better testing
 /// </summary>
 class TownControlPanel
 {
