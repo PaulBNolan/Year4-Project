@@ -53,6 +53,7 @@ void Road::render(sf::RenderWindow& t_window)
 	}
 }
 
+//This function is used to store the related town ids
 void Road::setRelatedIds(int t_id)
 {
 	if (m_connectedTownIds[0] < 0)
@@ -70,6 +71,7 @@ void Road::setActive(bool t_active)
 	m_active = t_active;
 }
 
+//This function is used to set the relevent positions of the road and then construct a series of tiles based on them
 void Road::setPositions(sf::Vector2f t_position)
 {
 	if (m_position[0].x == NULL)
@@ -143,6 +145,12 @@ void Road::setWidth(int t_value)
 {
 	m_widthValue += t_value;
 }
+
+/// <summary>
+/// Below are the classes get functions used to get relevent data
+/// </summary>
+/// <param name="t_i"></param>
+/// <returns></returns>
 
 int Road::getRelatedId(int t_i)
 {

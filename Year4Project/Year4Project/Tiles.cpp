@@ -14,6 +14,11 @@ void Tiles::render(sf::RenderWindow& t_window)
 	t_window.draw(m_body);
 }
 
+
+/// <summary>
+/// This function is used to set the type of the tile which determines its color
+/// </summary>
+/// <param name="t_type"></param>
 void Tiles::setType(TileType t_type)
 {
 	m_type = t_type;

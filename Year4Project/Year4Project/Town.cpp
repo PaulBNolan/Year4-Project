@@ -1,5 +1,10 @@
 #include "Town.h"
-
+/// <summary>
+/// Constructor of the town used to set up all relevent data
+/// </summary>
+/// <param name="t_position"></param>
+/// <param name="t_value"></param>
+/// <param name="t_id"></param>
 Town::Town(sf::Vector2f t_position, float t_value, int t_id)
 {
 	float radius = 12.5;
@@ -38,55 +43,60 @@ void Town::setRelatedIds(int t_id)
 	m_connectedRoadIds.push_back(t_id);
 }
 
+//Function used to find the heuristic of the town
 void Town::setHeuristic(sf::Vector2f t_dest)
 {
 	m_heuristic = sqrt(pow(m_center.x - t_dest.x,2) + pow(m_center.y - t_dest.y, 2));
 }
-
+//Function used to set the accumlated cost of the town
 void Town::setAccumaltedCost(float t_roadWeight, float t_prevCost)
 {
 	m_accumulatedCost = t_prevCost + t_roadWeight;
 }
-
+//Function use to push ids to the fron of the prev ids list
 void Town::pushFrontPrevIds(int t_id)
 {
 	m_prevIds.insert(m_prevIds.begin(),t_id);
 }
-
+//Functon used to set prev ids list
 void Town::setPrevIds(std::vector<int> t_currentPrev, int t_id)
 {
 	m_prevIds = t_currentPrev;
 	m_prevIds.push_back(t_id);
 }
-
+//Function used to pop the back of the prev ids list
 void Town::popBackPrevIds() {
 	m_prevIds.pop_back();
 }
-
+//Function used to pop the front of the prev ids list
 void Town::popFrontPrevIds()
 {
 	m_prevIds.erase(m_prevIds.begin());
 }
 
+//Function used to clear the prev ids list
 void Town::clearPrevIds()
 {
 	m_prevIds.clear();
 }
-
+//Function used to set the immediate previous node
 void Town::setPrevId(int t_id)
 {
 	m_prevId = t_id;
 }
 
+//Function used to set the checked value of the town
 void Town::setChecked(bool t_checked)
 {
 	m_checked = t_checked;
 }
 
+//Function used to see the current fuel value
 void Town::setCurrentFuel(float t_fuel)
 {
 	m_currentFuel = t_fuel;
 }
+
 void Town::setOriginalFuel(float t_fuel)
 {
 	m_originalFuelValue = t_fuel;
@@ -107,6 +117,7 @@ void Town::useFuelValue()
 {
 	m_fuelValue = 0;
 }
+
 void Town::resetFuelValue()
 {
 	m_fuelValue = m_originalFuelValue;
@@ -116,6 +127,18 @@ void Town::setColor(sf::Color t_color)
 {
 	m_town.setFillColor(t_color);
 }
+
+//Function used to set the number of fuelstations that the vehicle has passed at the time of arriving at this town 
+void Town::setNumberOfPasses(int t_value)
+{
+	m_numberOfStationsPassed = t_value;
+}
+
+
+/// <summary>
+/// Below are the get functions of the class used to obtain relevent data when needed
+/// </summary>
+/// <returns></returns>
 
 sf::Vector2f Town::getPosition()
 {
@@ -172,10 +195,6 @@ float Town::getFuelValue()
 	return m_fuelValue;
 }
 
-void Town::setNumberOfPasses(int t_value)
-{
-	m_numberOfStationsPassed = t_value;
-}
 int Town::getNumberOfPasses()
 {
 	return m_numberOfStationsPassed;

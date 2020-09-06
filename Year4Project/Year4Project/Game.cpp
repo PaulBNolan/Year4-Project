@@ -1,14 +1,9 @@
-/// <summary>
-/// @author Peter Lowe
-/// @date May 2019
-///
-/// you need to change the above lines or lose marks
-/// </summary>
+
 
 #include "Game.h"
 #include <iostream>
 
-
+///Class used to construct and handle game
 
 /// <summary>
 /// default constructor

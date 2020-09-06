@@ -1,5 +1,11 @@
 #include "Map.h"
-
+/// <summary>
+/// The construction of map based on loaded data
+/// </summary>
+/// <param name="t_map"></param>
+/// <param name="t_font"></param>
+/// <param name="t_car"></param>
+/// <param name="t_dimensions"></param>
 Map::Map(MapData t_map, sf::Font t_font, Car *& t_car, sf::Vector2f t_dimensions):
 	m_car(t_car)
 {
@@ -41,7 +47,9 @@ Map::Map(MapData t_map, sf::Font t_font, Car *& t_car, sf::Vector2f t_dimensions
 	m_mapDimensions = t_dimensions;
 	setHud();
 }
-
+/// <summary>
+/// Hud set up
+/// </summary>
 void Map::setHud()
 {
 	m_multiObjectiveHudBox.setPosition(sf::Vector2f(0, m_mapDimensions.y * 0.8));
@@ -112,6 +120,13 @@ void Map::update()
 	}
 }
 
+
+/// <summary>
+/// The main pathfinding algorithm
+/// </summary>
+/// <param name="t_startId"></param>
+/// <param name="t_targetId"></param>
+/// <param name="t_roadId"></param>
 void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 {
 
@@ -121,6 +136,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 	bool m_newPath = false;
 	bool m_oldPath = false;
 
+	//Set up for instances with no paths
 	if (t_roadId == -1)
 	{
 		m_passedIds.clear();
@@ -132,6 +148,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 	}
 	else
 	{
+		//Set up for instances with a path already present
 		//Both of these are set to the end and start of the current rough path with the id of the closest being found to determine the best location on the path to start off with
 		m_endTown = m_roughPath.front();
 		t_targetId = m_endTown->getID();
@@ -239,6 +256,12 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 			}
 		}
 
+		/// <summary>
+		/// Construction and set up of path
+		/// </summary>
+		/// <param name="t_startId"></param>
+		/// <param name="t_targetId"></param>
+		/// <param name="t_roadId"></param>
 		if (m_breakOffPoint != -1)
 		{
 			for (int i = m_roughPath.size() - 1; i >= 0; i--)
@@ -307,7 +330,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 	if (m_newPath == true || m_oldPath == true)
 	{
-
+		//Clearing and setting up of previous town and road data
 		for (int i = 0; i < m_townList.size(); i++)
 		{
 			m_townList[i]->setHeuristic(m_endTown->getCenter());
@@ -485,7 +508,8 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 						float m_estimatedFuelCost = m_nodeQue.back().m_currentFuel - m_roadList[m_roadIndex]->getWeight();
 
 						m_moreEfficent = false;
-
+						
+						//The below two situations are used to determine if a situation if more fuel efficent then one of its predecessors
 						if (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel())
 						{
 							m_moreEfficent = true;
@@ -500,8 +524,6 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 						if ((m_townIndex != m_prevIds.back() || m_moreEfficent == true) && m_estimatedFuelCost >= 0)
 						{
-							//std::cout << m_townList[m_currentTownId]->getCurrentFuel() << " " << m_roadList[m_roadIndex]->getWeight() << std::endl;
-							//std::cout << m_townList[m_townIndex]->getCurrentFuel() << std::endl;
 							m_stationPassed = false;
 							if (m_nodeQue.back().m_numberOfPasses > 0)
 							{
@@ -532,9 +554,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 							///The first half of the below situation is to check for the shortest path to the destination while the second half is used
 							///when a route encounters a shorter route with the less fuel ie the shorter route will be created first but if it encounters 
 							///a longer route with more fuel the longer route takes priority with the exception of the target node. The higher fuel value is to ensure a path can reach the target
-							/// so instances were the target node is checked but has taken more time are ignored
-							//if (dist < m_searchedNode || (m_estimatedFuelCost > m_townList[m_townIndex]->getCurrentFuel() && m_townList[m_townIndex]->getChecked()))
-							
+							/// so instances were the target node is checked but has taken more time are ignored		
 
 							if (dist < m_searchedNode || (m_moreEfficent == true && m_stationPassed == false && m_townList[m_townIndex]->getChecked() && m_townIndex != t_targetId))
 							{
@@ -567,16 +587,12 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 								}
 
 							}
-							//else
-							//{
-							//	std::cout << m_currentTownId << " to " << m_townIndex << " Failed Dist " << dist << " " << m_searchedNode <<std::endl;
-							//}
 
 							if (m_townList[m_townIndex]->getChecked() == false)
 							{
 								m_townList[m_townIndex]->setChecked(true);
 
-
+								//This is the sorting of the nodes searched
 								if (searchedTowns.size() == 0)
 								{
 									searchedTowns.push_back(m_townList[m_townIndex]);
@@ -626,15 +642,10 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 			{
 				for (int i = 0; i < searchedTowns.size(); i++)
 				{
-					//std::cout << "Searched Node" << searchedTowns[i]->getID() << " Heuristic " << searchedTowns[i]->getHeuristic() << std::endl;
 					if (searchedTowns.size() > 0)
 					{
 						m_nodeQue.push_back(NodeData(searchedTowns[i]->getID(), searchedTowns[i]->getPrevId(), searchedTowns[i]->getAccumaltedCost(), searchedTowns[i]->getCurrentFuel(), searchedTowns[i]->getNumberOfPasses()));
-						//m_searchQue.insert(m_searchQue.begin(), searchedTowns[i]);
-						//if (m_searchQue.back()->getID() == t_targetId)
-						//{
-						//	m_townList[m_searchQue.back()->getID()]->setPrevIds(m_townList[m_townList[m_searchQue.back()->getID()]->getPrevId()]->getPrevIds(), m_townList[m_searchQue.back()->getID()]->getPrevId());
-						//}
+			
 					}
 				}
 			}
@@ -649,7 +660,6 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 		if (m_townList[t_targetId]->getPrevIds().size() != 0)
 		{
 			int m_currentIndex = t_targetId;
-			//m_townList[t_targetId]->getPrevId().erase(m_townList[t_targetId]->getPrevId().begin());
 			std::vector<int> m_pathIds = m_townList[t_targetId]->getPrevIds();
 
 			m_pathIds.push_back(t_targetId);
@@ -678,7 +688,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 			m_currentAccumlatedCost = m_roughPath[0]->getAccumaltedCost();
 			m_currentFuel = m_roughPath[0]->getCurrentFuel();
-			std::cout << "Current fuel " << m_currentFuel << std::endl;
+
 			m_fuelValue = m_roughPath[0]->getFuelValue();
 			m_previousId = m_roughPath[1]->getID();
 
@@ -715,7 +725,7 @@ void Map::generatePath(int t_startId, int t_targetId, int t_roadId)
 
 				m_currentAccumlatedCost -= m_roadList[m_currentRoadIndex]->getWeight();
 				m_currentFuel += m_roadList[m_currentRoadIndex]->getWeight() - m_fuelValue;
-				std::cout << "Current fuel " << m_currentFuel << std::endl;
+
 				m_fuelValue = m_roughPath[index]->getFuelValue();
 
 				if (index + 1 < m_roughPath.size())
