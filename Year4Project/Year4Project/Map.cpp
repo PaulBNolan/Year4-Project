@@ -15,7 +15,6 @@ Map::Map(MapData t_map, sf::Font t_font, Car *& t_car, sf::Vector2f t_dimensions
 		m_roadList[i]->setPositions(m_townList[t_map.m_roads[i].m_relatedId2]->getCenter());
 		m_roadList[i]->setRelatedIds(t_map.m_roads[i].m_relatedId1);
 		m_roadList[i]->setRelatedIds(t_map.m_roads[i].m_relatedId2);
-		std::cout << t_map.m_roads[i].m_relatedId1 << " " << t_map.m_roads[i].m_relatedId2 << " " << m_roadList[i]->getWeight() << std::endl;
 	}
 
 	for (int i = 0; i < m_townList.size(); i++)
@@ -912,10 +911,6 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 			m_pathId = m_townList[m_pathId]->getPrevId();
 	}
 
-	for (int i = 0; i < m_aStarRoughPath.size(); i++)
-	{
-		std::cout << m_aStarRoughPath[i]->getCurrentFuel() << std::endl;
-	}
 
 	auto m_checkTimeEnd = std::chrono::high_resolution_clock::now();
 
@@ -989,8 +984,6 @@ void Map::generatePathAStar(int t_startId, int t_endId)
 		m_accumWidth += m_AStarNodeText[m_aStarRoughPath.size() - 1 - i].getGlobalBounds().width;
 	}
 }
-
-//[[spoiler:While searching for Kawaki in Konohagakure he approaches two ninjaand questions them on where Kawaki is.When one of them attacks him he casually counter attacksand repeats his question to the other.When the other ninja admits to not knowing where Kawaki is Isshiki simply changes the question to who they think might know while thanking them for not wasting his time.]]
 
 void Map::processMouseClick(sf::Vector2f t_carPos,sf::Vector2i t_mousePos)
 {
