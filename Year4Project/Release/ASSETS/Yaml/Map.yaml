@@ -1,0 +1,285 @@
+Towns:
+  - Name: "Town 1"
+    Position X: 50
+    Position Y: 50
+    Value: 0
+  - Name: "Town 2"
+    Position X: 100
+    Position Y: 50
+    Value: 0
+  - Name: "Town 3"
+    Position X: 100
+    Position Y: 100
+    Value: 0
+  - Name: "Town 4"
+    Position X: 50
+    Position Y: 100
+    Value: 0
+  - Name: "Town 5"
+    Position X: 200
+    Position Y: 200
+    Value: 0
+  - Name: "Town 6"
+    Position X: 200
+    Position Y: 50
+    Value: 0
+  - Name: "Town 7"
+    Position X: 275
+    Position Y: 100
+    Value: 0
+  - Name: "Town 8"
+    Position X: 350
+    Position Y: 50
+    Value: 0
+  - Name: "Town 9"
+    Position X: 350
+    Position Y: 200
+    Value: 0
+  - Name: "Town 10"
+    Position X: 350
+    Position Y: 350
+    Value: 0
+  - Name: "Town 11"
+    Position X: 350
+    Position Y: 500
+    Value: 0
+  - Name: "Town 12"
+    Position X: 150
+    Position Y: 350
+    Value: 0
+  - Name: "Town 13"
+    Position X: 500
+    Position Y: 350
+    Value: 0
+  - Name: "Town 14"
+    Position X: 150
+    Position Y: 500
+    Value: 0
+  - Name: "Town 15"
+    Position X: 500
+    Position Y: 50
+    Value: 0
+  - Name: "Town 16"
+    Position X: 500
+    Position Y: 500
+    Value: 0
+  - Name: "Town 17"
+    Position X: 500
+    Position Y: 200
+    Value: 0
+  - Name: "Town 18"
+    Position X: 700
+    Position Y: 200
+    Value: 0
+  - Name: "Town 19"
+    Position X: 700
+    Position Y: 50
+    Value: 0
+  - Name: "Town 20"
+    Position X: 700
+    Position Y: 350
+    Value: 0
+  - Name: "Town 21"
+    Position X: 900
+    Position Y: 350
+    Value: 1000
+  - Name: "Town 22"
+    Position X: 900
+    Position Y: 500
+    Value: 0
+  - Name: "Town 23"
+    Position X: 1100
+    Position Y: 350
+    Value: 0
+  - Name: "Town 24"
+    Position X: 1100
+    Position Y: 200
+    Value: 0
+  - Name: "Town 25"
+    Position X: 700
+    Position Y: 600
+    Value: 0
+  - Name: "Town 26"
+    Position X: 900 
+    Position Y: 50
+    Value: 0
+  - Name: "Town 27"
+    Position X: 1300
+    Position Y: 650
+    Value: 0
+  - Name: "Town 28"
+    Position X: 1100
+    Position Y: 500
+    Value: 0
+  - Name: "Town 29"
+    Position X: 1300
+    Position Y: 50
+    Value: 0
+  - Name: "Town 30"
+    Position X: 1600
+    Position Y: 50
+    Value: 0
+  - Name: "Town 31"
+    Position X: 1600
+    Position Y: 350
+    Value: 0
+  - Name: "Town 32"
+    Position X: 1300
+    Position Y: 350
+    Value: 0
+  - Name: "Town 33"
+    Position X: 1300
+    Position Y: 900
+    Value: 0
+  - Name: "Town 34"
+    Position X: 500
+    Position Y: 550
+    Value: 1000
+Roads:
+  - Id1: 0
+    Id2: 1
+    Width: 2
+  - Id1: 1
+    Id2: 2
+    Width: 2
+  - Id1: 2
+    Id2: 3
+    Width: 2
+  - Id1: 3
+    Id2: 0
+    Width: 2
+  - Id1: 2
+    Id2: 4
+    Width: 2
+  - Id1: 1
+    Id2: 3
+    Width: 2
+  - Id1: 1
+    Id2: 5
+    Width: 2
+  - Id1: 5
+    Id2: 7
+    Width: 1
+  - Id1: 5
+    Id2: 6
+    Width: 2
+  - Id1: 6
+    Id2: 7
+    Width: 2
+  - Id1: 4
+    Id2: 9
+    Width: 2
+  - Id1: 7
+    Id2: 8
+    Width: 2
+  - Id1: 8
+    Id2: 9
+    Width: 2
+  - Id1: 8
+    Id2: 12
+    Width: 2
+  - Id1: 10
+    Id2: 9
+    Width: 2
+  - Id1: 10
+    Id2: 12
+    Width: 2
+  - Id1: 11
+    Id2: 9
+    Width: 2
+  - Id1: 11
+    Id2: 4
+    Width: 2
+  - Id1: 10
+    Id2: 13
+    Width: 2
+  - Id1: 10
+    Id2: 15
+    Width: 2
+  - Id1: 8
+    Id2: 14
+    Width: 2
+  - Id1: 15
+    Id2: 24
+    Width: 2
+  - Id1: 21
+    Id2: 24
+    Width: 2
+  - Id1: 21
+    Id2: 27
+    Width: 2
+  - Id1: 27 
+    Id2: 26
+    Width: 2
+  - Id1: 25
+    Id2: 23
+    Width: 2
+  - Id1: 23
+    Id2: 22
+    Width: 2
+  - Id1: 22
+    Id2: 27
+    Width: 2
+  - Id1: 20
+    Id2: 21
+    Width: 2
+  - Id1: 19
+    Id2: 20
+    Width: 2
+  - Id1: 17
+    Id2: 19
+    Width: 2
+  - Id1: 14
+    Id2: 17
+    Width: 2
+  - Id1: 17
+    Id2: 25
+    Width: 2
+  - Id1: 14
+    Id2: 18
+    Width: 2
+  - Id1: 16
+    Id2: 17
+    Width: 2
+  - Id1: 23
+    Id2: 28
+    Width: 2
+  - Id1: 8
+    Id2: 16
+    Width: 1
+  - Id1: 11
+    Id2: 13
+    Width: 1
+  - Id1: 12
+    Id2: 19
+    Width: 1
+  - Id1: 18
+    Id2: 25
+    Width: 1
+  - Id1: 19
+    Id2: 24
+    Width: 1
+  - Id1: 20
+    Id2: 22
+    Width: 1
+  - Id1: 26
+    Id2: 31
+    Width: 1
+  - Id1: 26
+    Id2: 31
+    Width: 2
+  - Id1: 28
+    Id2: 30
+    Width: 2
+  - Id1: 30
+    Id2: 31
+    Width: 2
+  - Id1: 30
+    Id2: 29
+    Width: 2
+  - Id1: 33
+    Id2: 15
+    Width: 2
+  - Id1: 26
+    Id2: 32
+    Width: 2
